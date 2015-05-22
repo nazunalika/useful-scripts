@@ -47,8 +47,8 @@ if [ -z $(rpm -qa | grep wget) ]; then yum install wget -y ; fi
 a1_repos() {
 yum localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
 wget -q -O /etc/pki/rpm-gpg/SYRKIT-GPG-KEY http://syrkit.bromosapien.net:8081/SYRKIT-GPG-KEY.pub
-wget http://syrkit.bromosapien.net:8081/syndra/syndra-release-21-1.noarch.rpm
-yum install syndra-release-21-1.noarch.rpm -y
+wget http://syrkit.bromosapien.net:8081/syndra/syndra-release-22-1.noarch.rpm
+yum install syndra-release-22-1.noarch.rpm -y
 }
 
 a2_install() {
