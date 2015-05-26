@@ -7,7 +7,8 @@ STANDARD="firefox thunderbird pidgin clementine vlc"
 
 ## Place a comment behind any of the next lines to remove it from the selection of packages
 ## Music/video codecs
-CODECS="gstreamer{1,}-{plugin-crystalhd,ffmpeg,rtsp,libav,plugins-{good,ugly,bad{,-free,-nonfree,-freeworld,-extras{-extras}}} ffmpeg libmpg123 lame-libs"
+CODECS="gstreamer-* gstreamer1-* ffmpeg libmpg123 lame-libs"
+#CODECS="gstreamer{1,}-{plugin-crystalhd,ffmpeg,rtsp,libav,plugins-{good,ugly,bad{,-free,-nonfree,-freeworld,-extras{-extras}}} ffmpeg libmpg123 lame-libs"
 ## Note: The below is just for reference of fedora 17 to 18.
 #CODECS="gstreamer-{ffmpeg,rtsp,plugins-{good,ugly,bad{,-free,-nonfree}}} gstreamer1-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg"
 
@@ -52,7 +53,7 @@ dnf install syndra-release-22-1.noarch.rpm -y
 }
 
 a2_install() {
-dnf install $CODECS $STANDARD ${OPTIONAL[*]} $EXTRAS $32LIBS -y
+dnf install $CODECS $STANDARD ${OPTIONAL[*]} $EXTRAS $32LIBS --exclude=*docs --exclude=*debug --exclude=*devel -y
 }
 a3_update() {
 dnf update -y
