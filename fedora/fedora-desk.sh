@@ -41,21 +41,21 @@ if [[ $UID != 0 ]]; then
 fi
 }
 p2_checkwget() {
-if [ -z $(rpm -qa | grep wget) ]; then yum install wget -y ; fi
+if [ -z $(rpm -qa | grep wget) ]; then dnf install wget -y ; fi
 }
 
 a1_repos() {
-yum localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
+dnf install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
 wget -q -O /etc/pki/rpm-gpg/SYRKIT-GPG-KEY http://syrkit.bromosapien.net:8081/SYRKIT-GPG-KEY.pub
 wget http://syrkit.bromosapien.net:8081/syndra/syndra-release-22-1.noarch.rpm
-yum install syndra-release-22-1.noarch.rpm -y
+dnf install syndra-release-22-1.noarch.rpm -y
 }
 
 a2_install() {
-yum install $CODECS $STANDARD ${OPTIONAL[*]} $EXTRAS $32LIBS -y
+dnf install $CODECS $STANDARD ${OPTIONAL[*]} $EXTRAS $32LIBS -y
 }
 a3_update() {
-yum update -y
+dnf update -y
 }
 f1_skype_pa_fix() {
 sed -i 's/Exec=/Exec=env PULSE_LATENCY_MSEC=30 /' /usr/share/applications/skype.desktop
