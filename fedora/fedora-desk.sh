@@ -7,7 +7,7 @@ STANDARD="firefox thunderbird pidgin clementine vlc"
 
 ## Place a comment behind any of the next lines to remove it from the selection of packages
 ## Music/video codecs
-CODECS="gstreamer-* gstreamer1-* ffmpeg libmpg123 lame-libs"
+CODECS="gstreamer-* gstreamer1-* libmpg123 lame-libs ffmpeg"
 #CODECS="gstreamer{1,}-{plugin-crystalhd,ffmpeg,rtsp,libav,plugins-{good,ugly,bad{,-free,-nonfree,-freeworld,-extras{-extras}}} ffmpeg libmpg123 lame-libs"
 ## Note: The below is just for reference of fedora 17 to 18.
 #CODECS="gstreamer-{ffmpeg,rtsp,plugins-{good,ugly,bad{,-free,-nonfree}}} gstreamer1-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg"
@@ -32,7 +32,8 @@ DRIVERS=""
 
 ## As for this, if you are installing kmod-nvidia, uncomment this.
 ## Highly recommended if you plan on playing 32 bit games in wine or steam.
-#32LIBS="xorg-x11-drv-nvidia-libs.i686"
+LIBS=""
+#LIBS="xorg-x11-drv-nvidia-libs.i686"
 
 # Functions
 p1_checkroot() {
@@ -42,18 +43,26 @@ if [[ $UID != 0 ]]; then
 fi
 }
 p2_checkwget() {
-if [ -z $(rpm -qa | grep wget) ]; then dnf install wget -y ; fi
+if [[ -z $(rpm -qa | grep wget) ]]; then dnf install wget -y ; fi
 }
 
 a1_repos() {
-dnf install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
-wget -q -O /etc/pki/rpm-gpg/SYRKIT-GPG-KEY https://syrkit.bromosapien.net/SYRKIT-GPG-KEY.pub
-wget https://syrkit.bromosapien.net/syndra/syndra-release-22-1.noarch.rpm
-dnf install syndra-release-22-1.noarch.rpm -y
+if [[ -z $(rpm -qa | grep rpmfusion) ]]; then
+	dnf install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
+fi
+if [[ -z $(rpm -qa | grep syndra) ]]; then
+	wget -q -O /etc/pki/rpm-gpg/SYRKIT-GPG-KEY https://syrkit.bromosapien.net/SYRKIT-GPG-KEY.pub
+	wget https://syrkit.bromosapien.net/syndra/syndra-release-22-2.noarch.rpm
+	dnf install syndra-release-22-2.noarch.rpm -y
+fi
 }
 
 a2_install() {
-dnf install $CODECS $STANDARD ${OPTIONAL[*]} $EXTRAS $32LIBS --exclude=*docs --exclude=*debug --exclude=*devel -y
+if [[ ! -z $(rpm -qa | grep rpmfusion) ]]; then
+	dnf install $CODECS $STANDARD ${OPTIONAL[*]} $EXTRAS ${LIBS} --exclude=*docs --exclude=*debug --exclude=*devel -y
+else
+	echo "RPM Fusion was not successfully installed. Ignoring."
+fi
 }
 a3_update() {
 dnf update -y
