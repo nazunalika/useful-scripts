@@ -1,7 +1,12 @@
 #!/bin/bash
 # tucklesepk@gmail.com
+## Please consider using another repo to take care of skype and/or pepperflash (if applicable)
+## Syndra is a personal repo for handling things not available to rpmfusion.
 
 # Varibles
+## Syndra or Copr?
+syndra=1
+
 ## Package lists
 STANDARD="firefox thunderbird pidgin clementine vlc"
 
@@ -50,7 +55,7 @@ a1_repos() {
 if [[ -z $(rpm -qa | grep rpmfusion) ]]; then
 	dnf install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
 fi
-if [[ -z $(rpm -qa | grep syndra) ]]; then
+if [[ $syndra == "1" ]]; then
 	wget -q -O /etc/pki/rpm-gpg/SYRKIT-GPG-KEY https://syrkit.bromosapien.net/SYRKIT-GPG-KEY.pub
 	wget https://syrkit.bromosapien.net/f23/syndra-release-23-3.noarch.rpm
 	dnf install syndra-release-23-3.noarch.rpm -y
