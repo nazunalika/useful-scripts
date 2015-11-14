@@ -52,8 +52,8 @@ if [[ -z $(rpm -qa | grep rpmfusion) ]]; then
 fi
 if [[ -z $(rpm -qa | grep syndra) ]]; then
 	wget -q -O /etc/pki/rpm-gpg/SYRKIT-GPG-KEY https://syrkit.bromosapien.net/SYRKIT-GPG-KEY.pub
-	wget https://syrkit.bromosapien.net/syndra/syndra-release-22-2.noarch.rpm
-	dnf install syndra-release-22-2.noarch.rpm -y
+	wget https://syrkit.bromosapien.net/f23/syndra-release-23-3.noarch.rpm
+	dnf install syndra-release-23-3.noarch.rpm -y
 fi
 }
 
