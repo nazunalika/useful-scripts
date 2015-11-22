@@ -26,9 +26,10 @@ lang en_US.UTF-8
 
 # Network information
 ## Note, consider changing the below if you don't believe your VM's will have ens192.
+## And also change it if you don't use DHCP
 network  --bootproto=dhcp --device=ens192 --ipv6=auto --activate
 # Root password
-rootpw --iscrypted $6$y2zGao462qWtTVTN$Kn36U4Z9gBKF4DqkYpe7I38iEaPUrA15UL72D4.Nav/lbsZrxZMdjaY89/s3UxY6MqWoBucEJzEQa5TjmkTUA1
+rootpw --iscrypted $6$HASH
 # System timezone
 timezone America/Phoenix --nontp
 # System bootloader configuration
@@ -343,18 +344,16 @@ chmod og-rwx /etc/cron{tab,.{hourly,daily,weekly,monthly,.d}}
 # This may not be required, but something to think about. This prevents people from running at.
 # Because people can be real... winners.
 rm /etc/at.deny
-touch /etc/at.allow
+[ ! -f /etc/at.allow ] && touch /etc/at.allow && echo "root" >> /etc/at.allow
 chown root:root /etc/at.allow
 chmod og-rwx /etc/at.allow
 
 ## CIS 6.1.11
 # This is up to you. This prevents users (except root) from running cron.
 rm /etc/cron.deny
-rm /etc/at.deny
+[ ! -f /etc/cron.allow ] && touch /etc/cron.allow && echo "root" >> /etc/cron.allow
 chmod og-rwx /etc/cron.allow
-chmod og-rwx /etc/at.allow
 chown root:root /etc/cron.allow
-chown root:root /etc/at.allow
 
 ## CIS 6.2.4 6.2.5 6.2.10 6.2.11 6.2.12
 # Some of these may or may not be needed. Tread lightly. Uncomment them if you want them.
