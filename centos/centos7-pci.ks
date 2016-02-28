@@ -73,7 +73,6 @@ repo --name=epel --baseurl=http://download.fedoraproject.org/pub/epel/7/x86_64/
 -NetworkManager-team
 -NetworkManager-tui
 -wpa_supplicant
--chrony
 -trousers
 -cronie
 -cronie-anacron
