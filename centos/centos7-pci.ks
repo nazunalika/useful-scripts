@@ -107,9 +107,11 @@ tcpdump
 sysstat
 policycoreutils
 policycoreutils-python
+bash-completion
 ## Comment the below/replace with chrony when ready
-ntp
-ntpdate
+#ntp
+#ntpdate
+chrony
 # Needed for remote authentication in an AD environment
 sssd-ad
 sssd-krb5-common
@@ -184,10 +186,10 @@ systemctl disable avahi-daemon
 systemctl disable cups
 
 ## Secure ntp - CIS 3.6
-## Note: This is ALREADY taken care of if utilizing chrony. Remove when ready.
-sed -i 's/restrict default nomodify notrap nopeer noquery/restrict default kod nomodify notrap nopeer noquery\nrestrict -6 default kod nomodify notrap nopeer noquery/g' /etc/ntp.conf
-systemctl enable ntpd
-#systemctl enable chrony
+## Note: This is ALREADY taken care of it utilizing chrony. Remove when ready.
+#sed -i 's/restrict default nomodify notrap nopeer noquery/restrict default kod nomodify notrap nopeer noquery\nrestrict -6 default kod nomodify notrap nopeer noquery/g' /etc/ntp.conf
+#systemctl enable ntpd
+systemctl enable chrony
 
 ## NFS and RPC - CIS 3.8
 systemctl disable nfslock
