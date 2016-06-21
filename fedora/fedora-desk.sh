@@ -18,7 +18,8 @@ CODECS="gstreamer-* gstreamer1-* libmpg123 lame-libs ffmpeg"
 #CODECS="gstreamer-{ffmpeg,rtsp,plugins-{good,ugly,bad{,-free,-nonfree}}} gstreamer1-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg"
 
 ## Set the variables here for optional software
-OPTIONAL[1]=""
+# Removing Skype. Use the skype web pidgin plugin instead
+#OPTIONAL[1]="skype"
 OPTIONAL[2]="teamviewer"
 OPTIONAL[3]="wine"
 OPTIONAL[4]="steam"
