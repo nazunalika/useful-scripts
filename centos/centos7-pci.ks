@@ -121,9 +121,17 @@ tcpdump
 sysstat
 policycoreutils
 policycoreutils-python
+<<<<<<< HEAD
 ## CIS 2.2.1.1 2.2.1.2
 chrony
 ntpdate
+=======
+bash-completion
+## Comment the below/replace with chrony when ready
+#ntp
+#ntpdate
+chrony
+>>>>>>> 159e7a9affda1553964af5977be66ed688e2778d
 # Needed for remote authentication in an AD environment
 sssd-ad
 sssd-krb5-common
@@ -218,7 +226,20 @@ echo "umask 027" >> /etc/sysconfig/init
 # Other rpc services are listed from an earlier version, may not be necessary
 systemctl disable avahi-daemon
 systemctl disable cups
+<<<<<<< HEAD
 systemctl disable nfs
+=======
+
+## Secure ntp - CIS 3.6
+## Note: This is ALREADY taken care of it utilizing chrony. Remove when ready.
+#sed -i 's/restrict default nomodify notrap nopeer noquery/restrict default kod nomodify notrap nopeer noquery\nrestrict -6 default kod nomodify notrap nopeer noquery/g' /etc/ntp.conf
+#systemctl enable ntpd
+systemctl enable chrony
+
+## NFS and RPC - CIS 3.8
+systemctl disable nfslock
+systemctl disable rpcgssd
+>>>>>>> 159e7a9affda1553964af5977be66ed688e2778d
 systemctl disable rpcbind
 systemctl disable rpcgssd
 systemctl disable rpcidmapd
