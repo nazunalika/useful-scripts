@@ -10,6 +10,10 @@
 #              The %i variable takes care of taking the name after the
 #              "@" in the file name and goes from there.
 
+#              "ifxdir" is a symbolic link in our case below. 
+#              Example...
+#              /opt/informix/ifxdir -> /opt/informix/informix/ifx.12.10.FC4
+
 #              It is highly recommended to leave this service as forking.
 #              In a normal scenario, Red Hat and other systemd developers
 #              at least recommend "wrapper" scripts or processes that
@@ -36,8 +40,9 @@ User=informix
 Environment="INFORMIXDIR=/opt/informix/ifxdir"
 Environment="INFORMIXSERVER=%i"
 Environment="ONCONFIG=onconfig.%i"
-ExecStart=/opt/informix/informix/inf11_70_fc8/bin/oninit
-ExecStop=/opt/informix/informix/inf11_70_fc8/bin/onmode -ky
+Environment="INFORMIXSQLHOSTS=/opt/informix/ifxdir/etc/sqlhosts"
+ExecStart=/opt/informix/ifxdir/bin/oninit
+ExecStop=/opt/informix/ifxdir/bin/onmode -ky
 
 [Install]
 WantedBy=multi-user.target
