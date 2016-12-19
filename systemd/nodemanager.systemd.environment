@@ -1,0 +1,4 @@
+WL_HOME="/opt/oracle/...Fill in the blank..."
+NODEMGR_HOME="/opt/oracle/...Fill in the blank.../nodemanager"
+DOMAIN_HOME="/opt/oracle/...Fill in the blank..."
+ROOT_DIRECTORY="/opt/oracle/...Fill in the blank..."

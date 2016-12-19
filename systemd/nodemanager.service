@@ -1,0 +1,36 @@
+# /etc/systemd/system/nodemanager.service
+
+# Louis Abel <tucklesepk@gmail.com>
+# 12/19/2016
+# Weblogic Node Manager Systemd Unit
+
+# Information: The EnvironmentFile is required.
+#  
+#              It is highly recommended that you fill in the blank
+#              where necessary. The folder structure used where my
+#              ${current_job} is was omitted for various reasons.
+#              And plus, it was only fair that I kept /opt/oracle
+#              in this example, as any sane admin would never use
+#              /u01 or another stupid oracle example or even 
+#              so-called "recommendations."
+#
+
+[Unit]
+Description=Weblogic Node Manager
+After=network.target remote-fs.target
+
+[Service]
+User=weblogic
+Group=weblogic
+Type=simple
+EnvironmentFile=-/opt/oracle/systemd.environment
+ExecStartPre=/opt/oracle/...Fill in the blank.../setWLSEnv.sh
+ExecStart=/opt/oracle/...Fill in the blank.../startNodeManager.sh
+ExecStop=/opt/oracle/...Fill in the blank.../stopNodeManager.sh
+SuccessExitStatus=143 SIGKILL
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target
+
