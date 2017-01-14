@@ -13,8 +13,8 @@ STANDARD="firefox thunderbird pidgin clementine vlc"
 
 ## Place a comment behind any of the next lines to remove it from the selection of packages
 ## Music/video codecs
-#
-CODECS="gstreamer-* gstreamer1-* libmpg123 lame-libs ffmpeg"
+# gstreamer 0.10 is deprecated and not maintained. Install it separately if you need it. 
+CODECS="gstreamer1-* libmpg123 lame-libs ffmpeg"
 
 ## Set the variables here for optional software
 # Removing Skype. Use the skype web pidgin plugin instead
