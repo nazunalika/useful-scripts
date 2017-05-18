@@ -5,22 +5,21 @@
 
 # Varibles
 ## Syndra or Copr?
-syndra=1
+## Disabled by default because the repo is not back up yet.
+syndra=0
 
 ## Package lists
 STANDARD="firefox thunderbird pidgin clementine vlc"
 
 ## Place a comment behind any of the next lines to remove it from the selection of packages
 ## Music/video codecs
-CODECS="gstreamer-* gstreamer1-* libmpg123 lame-libs ffmpeg"
-#CODECS="gstreamer{1,}-{plugin-crystalhd,ffmpeg,rtsp,libav,plugins-{good,ugly,bad{,-free,-nonfree,-freeworld,-extras{-extras}}} ffmpeg libmpg123 lame-libs"
-## Note: The below is just for reference of fedora 17 to 18.
-#CODECS="gstreamer-{ffmpeg,rtsp,plugins-{good,ugly,bad{,-free,-nonfree}}} gstreamer1-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg"
+# gstreamer 0.10 is deprecated and not maintained. Install it separately if you need it. 
+CODECS="gstreamer1-* libmpg123 lame-libs ffmpeg"
 
 ## Set the variables here for optional software
 # Removing Skype. Use the skype web pidgin plugin instead
 #OPTIONAL[1]="skype"
-OPTIONAL[2]="teamviewer"
+#OPTIONAL[2]="teamviewer"
 OPTIONAL[3]="wine"
 OPTIONAL[4]="steam"
 OPTIONAL[5]="audacity-freeworld"
@@ -54,12 +53,12 @@ if [[ -z $(rpm -qa | grep wget) ]]; then dnf install wget -y ; fi
 
 a1_repos() {
 if [[ -z $(rpm -qa | grep rpmfusion) ]]; then
-	dnf install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
+	dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
 fi
 if [[ $syndra == "1" ]]; then
 	wget -q -O /etc/pki/rpm-gpg/SYRKIT-GPG-KEY https://syrkit.bromosapien.net/SYRKIT-GPG-KEY.pub
-	wget https://syrkit.bromosapien.net/f24/syndra-release-24-3.noarch.rpm
-	dnf install syndra-release-24-3.noarch.rpm -y
+	wget https://syrkit.bromosapien.net/f25/syndra-release-25-3.noarch.rpm
+	dnf install syndra-release-25-3.noarch.rpm -y
 fi
 }
 
