@@ -39,9 +39,32 @@ It's generally pretty easy to create your own layout to make it default for new 
 
 If you wish to create your own layout, you'll need to do the following:
 
- * Create a new user
- * Setup the layout to your liking
- * Open powershell
- * Run: Export-StartLayout -path <path>/<filename>.xml
+* Create a new user
+* Setup the layout to your liking
+* Open powershell
+* Run: Export-StartLayout -path <path>\\<filename>.xml
 
-If you wish to incorporate your layout into the cleanup script, modify the section of the script that imports a layout. You'll need to replace C:\Programs\layout.xml with the location of the custom xml you have.
+If you wish to incorporate your layout into the cleanup script, modify the section of the script that imports a layout. You'll need to replace C:\\Programs\\layout.xml with the location of the custom xml you have.
+
+Setting up a $OEM$ layout
+-------------------------
+
+There are many, many, many guides online that explains how to do this. But in summary, you'll need to modify the ISO, USB, or whatever media you're using.
+
+* Create a $OEM$ folder under sources
+* Create a $$ folder for anything in C:\\Windows
+
+  * You can create folders and files here and they'll drop in that directory.
+  * Setup\\Scripts\\Setupcomplete.cmd, if it exists, will execute during the OOBE stage (before first login)
+
+* Create a $1 folder for anything in C:\\
+
+  * Make folders/files in here if you want scripts/files to be available
+  * I generally will make a Programs folder and put scripts, registry files, and other stuff in my images, you'll notice that in my scripts
+
+In general the folders will look like this before you add anything of your own:
+
+* \\sources\\$OEM$    - Required if you want to deploy your own stuff from your images
+* \\sources\\$OEM$\\$1 - Required if you want to deploy anything to the root system drive
+* \\sources\\$OEM$\\$$ - Required if you want to deploy anything to the windows folder
+
