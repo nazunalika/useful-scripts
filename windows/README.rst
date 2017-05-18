@@ -1,8 +1,10 @@
-# Windows Scripts
+Windows Scripts
+^^^^^^^^^^^^^^^
 
 These are some of my windows scripts. I'm not a Windows admin. However, a lot of people I know use windows exclusively for reasons such as not being in IT and being gamers. And also, some are casual users. These scripts are the ones I use to make my life easier when reinstalling Windows or performing fresh installs of Windows for others.
 
-## Windows 10 Cleanup
+Windows 10 Cleanup
+------------------
 
 One of the scripts you'll notice is called win10clean.ps1. It is a powershell script that aims at debloating Windows 10 as much as possible. Right now, I have it as close as I possibly can for the latest update (1703). I'm still tweaking it a little bit. So far, it seems to work ok after a setup or even during the Setupcomplete.cmd calls.
 
