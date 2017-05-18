@@ -31,3 +31,17 @@ There is a variable to control almost all of the changes this script can make. P
 If you plan on running this script, please keep in mind your system will reboot. There is a variable to control this if you do not wish to reboot.
 
 As a note, this only works on the Pro, Enterprise, and Education SKU's. I will not support the home edition.
+
+Layout
+------
+
+It's generally pretty easy to create your own layout to make it default for new users. The one in my repo here basically considers that firefox, notepad++, and 7zip are installed on the system. The layout will come out in a very generic way. 
+
+If you wish to create your own layout, you'll need to do the following:
+
+ * Create a new user
+ * Setup the layout to your liking
+ * Open powershell
+ * Run: Export-StartLayout -path <path>/<filename>.xml
+
+If you wish to incorporate your layout into the cleanup script, modify the section of the script that imports a layout. You'll need to replace C:\Programs\layout.xml with the location of the custom xml you have.
