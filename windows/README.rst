@@ -68,3 +68,10 @@ In general the folders will look like this before you add anything of your own:
 * \\sources\\$OEM$\\$1 - Required if you want to deploy anything to the root system drive
 * \\sources\\$OEM$\\$$ - Required if you want to deploy anything to the windows folder
 
+Screenshots
+-----------
+
+The default view using my layout and setupcomplete.cmd. 
+
+.. image:: http://i.imgur.com/rdh1e94.jpg
+
