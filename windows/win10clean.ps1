@@ -6,9 +6,8 @@
 #
 # 05/16/2017 - Initial creation
 # 05/17/2017 - Added functions for messages
+# 05/20/2017 - Fixed defender icon tray
 #
-# Todo
-#  -> Find a way to turn off the "suggestions" in the user's settings
 
 #############################################################################################
 # I am not a powershell scripter and I do not claim to be. A lot of the stuff I did here was
@@ -433,6 +432,7 @@ If ($DisableDefender -eq '1') {
     # Disable the annoying tray
     show-message "Removing Defender Tray"
     rp "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" "WindowsDefender" -ea 0
+    rp "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" "SecurityHealth" -ea 0
 
     # There are task scheduler things to turn off
     show-message "Removing Defender Scheduled Tasks"
