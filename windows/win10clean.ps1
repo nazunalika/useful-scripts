@@ -7,6 +7,7 @@
 # 05/16/2017 - Initial creation
 # 05/17/2017 - Added functions for messages
 # 05/20/2017 - Fixed defender icon tray
+#            - Fixed the onedrive stuff to be consistent
 #
 
 #############################################################################################
@@ -395,9 +396,9 @@ If ($RemoveOneDrive -eq '1') {
     # Making it so the sidebar doesn't have it anymore
     show-message "Disabling OneDrive Sidebar"
     New-PSDrive -PSProvider "Registry" -Root "HKEY_CLASSES_ROOT" -Name "HKCR"
-    mkdir -Force "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
+    mkdir-forceful "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
+    mkdir-forceful "HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
     sp "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" "System.IsPinnedToNameSpaceTree" 0
-    mkdir -Force "HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
     sp "HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" "System.IsPinnedToNameSpaceTree" 0
     Remove-PSDrive "HKCR"
 
@@ -407,8 +408,6 @@ If ($RemoveOneDrive -eq '1') {
     reg delete "HKEY_USERS\Default\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "OneDriveSetup" /f
     reg unload "hku\Default"
     rm -Force -ErrorAction SilentlyContinue "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\OneDrive.lnk"
-
-    # Start explorer
 }
 
 # WARNING: If you remove the store, you can no longer install Windows Apps. If you actually
