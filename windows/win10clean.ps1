@@ -8,6 +8,7 @@
 # 05/17/2017 - Added functions for messages
 # 05/20/2017 - Fixed defender icon tray
 #            - Fixed the onedrive stuff to be consistent
+# 10/17/2017 - Fall Update
 #
 
 #############################################################################################
@@ -109,9 +110,10 @@ $applist = @(
     "*xboxapp*"
     "*minecraft*"
     "*MicrosoftOfficeHub*"
+    "Microsoft.MicrosoftStickyNotes"
 )
 
-# I think some of these are part of the 2017 creators update
+# Some are part of 2017 update and some other random OEM things
 $extraAppList = @(
     "*MarchOfEmpires*"
     "9E2F88E3.Twitter"
