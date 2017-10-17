@@ -520,6 +520,10 @@ if ($UsabilityFeatures -eq 1) {
         show-warning "Disabling automatic driver updates"
         sp "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching" "SearchOrderConfig" 0
     }
+    # Disable people bar
+    sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" "PeopleBand" 0
+    # Remove "modern sharing" - original value is {e2bf9676-5f8f-435c-97eb-11607a5bedf7}
+    ri 'HKLM:\SOFTWARE\Classes\`*\shellex\ContextMenuHandlers\ModernSharing'
 
     # Making brand new users have similar settings from above and others
     Write-Host "Attempting to disable all new users from getting Content Delivery Apps (does not affect current user)"
@@ -533,6 +537,7 @@ if ($UsabilityFeatures -eq 1) {
     sp "Registry::HKU\Default_User\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" "SoftLandingEnabled" 0
     sp "Registry::HKU\Default_User\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" "SilentInstalledAppsEnabled" 0
     sp "Registry::HKU\Default_User\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" "ShowSyncProviderNotifications" 0
+    sp "Registry::HKU\Default_User\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" "PeopleBand" 0
     reg unload HKU\Default_User
 }
 
