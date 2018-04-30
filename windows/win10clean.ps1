@@ -9,7 +9,7 @@
 # 05/20/2017 - Fixed defender icon tray
 #            - Fixed the onedrive stuff to be consistent
 # 10/17/2017 - Fall Update
-#
+# 04/30/2018 - Tested with April update - no changes
 
 #############################################################################################
 # I am not a powershell scripter and I do not claim to be. A lot of the stuff I did here was
