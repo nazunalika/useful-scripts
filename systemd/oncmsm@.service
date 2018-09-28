@@ -1,0 +1,32 @@
+# By: Louis Abel <tucklesepk@gmail.com>
+#     Ryan Hughes <ryan.a.hughes1@gmail.com>
+#     
+# To use:
+#  -> systemctl enable oncmsm@instance.service
+#  -> systemctl start oncmsm@instance.service
+#
+#  You do not need to copy this file to anything else. You only need to specify
+#  the instance name. 
+
+[Unit]
+Description=Informix Connection Manager
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+User=informix
+
+LimitMEMLOCK=50000000
+LimitNOFILE=131072
+LimitNPROC=131072
+LimitCORE=50000000
+
+Environment="INFORMIXDIR=/opt/informix/ifxdir"
+Environment="CMCONFIG=/opt/informix/ifxdir/etc/cmsm-%i.cfg"
+
+ExecStart=/opt/informix/ifxdir/bin/oncmsm -c /opt/informix/ifxdir/etc/cmsm-%i.cfg
+ExecStop=/opt/informix/ifxdir/bin/oncmsm -k %i
+
+[Install]
+WantedBy=multi-user.target
+
