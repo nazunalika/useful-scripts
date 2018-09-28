@@ -19,7 +19,7 @@ User=informix
 LimitMEMLOCK=50000000
 LimitNOFILE=131072
 LimitNPROC=131072
-LimitCORE=50000000
+LimitCORE=infinity
 
 Environment="INFORMIXDIR=/opt/informix/ifxdir"
 Environment="CMCONFIG=/opt/informix/ifxdir/etc/cmsm-%i.cfg"
