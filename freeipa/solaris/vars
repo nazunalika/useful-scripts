@@ -1,0 +1,35 @@
+# ./solaris/vars
+
+# Variables for IPA Join
+export DOMAIN="ipa.example.com"
+export REALM="IPA.EXAMPLE.COM"
+export BASEDN="dc=ipa,dc=example,dc=com"
+export DIGLIST=`dig _ldap._tcp.${DOMAIN} SRV +short | awk '{print $4}'| sort`
+export DIGPREF=`dig _ldap._tcp.${DOMAIN} SRV +short | awk '/^0 100/ {print $4}'`
+export PROXYDN="uid=solaris,cn=sysaccounts,cn=etc,${BASEDN}"
+export PROXYPASS="<<PASSWORD>>"
+
+# Detect Solaris 10 or 11
+export OSVER="$(awk 'NR==1{print $3;}' /etc/release)"
+
+# You may change these as you see fit. Some have seen success setting the
+# authMethod to "none", which should use kerberos. But it may require some pam
+# changes. As a note, if you are using an AD trust in your environment, you
+# may not be able to use use kerberos to authenticate AD users. I have not
+# found a way around this personally.
+
+# Solaris 10: Simple, no TLS (too old to support new ciphers, consider krb)
+# Solaris 11: Simple, TLS
+
+case "$OSVER" in
+  10)
+    export authMethod="simple"
+    export DEFAULTLIST=`echo $DIGLIST | sed 's/com\./com/g'`
+    export PREFLIST=`echo $DIGPREF | sed 's/com\./com/g'`
+  11)
+    export authMethod="tls:simple"
+    export DEFAULTLIST="${DIGLIST//.com./.com}"
+    export PREFLIST="${DIGPREF//.com./.com}"
+esac
+
+export PRIMESERVER=`echo ${DEFAULTLIST} | awk '{print $1}'`

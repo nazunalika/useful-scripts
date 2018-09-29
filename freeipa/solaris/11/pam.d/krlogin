@@ -1,0 +1,2 @@
+auth required           pam_unix_cred.so.1
+auth required           pam_krb5.so.1

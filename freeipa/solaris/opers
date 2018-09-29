@@ -1,0 +1,134 @@
+# ./solaris/opers
+
+# For ldapclient, you can try to use kerberos to talk to the IPA servers
+# but I cannot guarantee results. Remove proxyDN and proxyPassword if this
+# is the case.
+
+configure_ldap() {
+  # LDAP conf for sudo and utilities
+  cat > /etc/ldap.conf <<EOF
+base ${BASEDN}
+scope sub
+TLS_CACERTDIR /var/ldap
+TLS_CACERT /var/ldap/ipa.crt
+tls_checkpeer no
+ssl start_tls
+bind_timelimit 120
+timelimit 120
+uri ldap://${PRIMESERVER}
+sudoers_base ou=sudoers,${BASEDN}
+pam_lookup_policy yes
+EOF
+
+  # init ldap client
+  ldapclient manual -a credentialLevel=proxy \
+                    -a authenticationMethod=${authMethod} \
+                    -a defaultSearchBase=${BASEDN} \
+                    -a defaultSearchScope=one \
+                    -a domainName=${DOMAIN} \
+                    -a preferredServerList="${PREFLIST}" \
+                    -a defaultServerList="${DEFAULTLIST}" \
+                    -a followReferrals=true \
+                    -a objectClassMap=shadow:shadowAccount=posixAccount \
+                    -a objectClassMap=passwd:posixAccount=posixaccount \
+                    -a objectClassMap=group:posixGroup=posixgroup \
+                    -a serviceSearchDescriptor=group:cn=groups,cn=compat,${BASEDN} \
+                    -a serviceSearchDescriptor=passwd:cn=users,cn=compat,${BASEDN} \
+                    -a serviceSearchDescriptor=netgroup:cn=ng,cn=compat,${BASEDN} \
+                    -a serviceSearchDescriptor=ethers:cn=computers,cn=accounts,${BASEDN} \
+                    -a serviceSearchDescriptor=sudoers:ou=sudoers,${BASEDN} \
+                    -a bindTimeLimit=5 \
+                    -a proxyDN="${PROXYDN}" \
+                    -a proxyPassword="${PROXYPASS}"
+
+  # Restart things for good measure
+  svcadm restart ldap/client name-services name-service-switch
+}
+
+configure_nsswitch() {
+  case $OSVER in
+    10)
+      cp ./solaris/10/nsswitch.conf /etc/nsswitch.conf
+      ;;
+    11)
+      svccfg -s svc:/system/name-service/switch -f ./solaris/11/nsswitch.cfg
+      ;;
+  esac
+}
+
+configure_pam() {
+  case $OSVER in
+    10)
+      cp /etc/pam.conf /etc/pam.conf.backup
+      cp ./solaris/10/pam.conf /etc/pam.conf
+      ;;
+    11)
+      tar cf /root/pambackup.tar /etc/pam.d/*
+      cp ./solaris/11/pam.d/* /etc/pam.d/
+      ;;
+  esac
+}
+
+set_defaultdomain() {
+  echo "${DOMAIN}" > /etc/defaultdomain
+}
+
+pull_certificate() {
+  case $OSVER in
+    10)
+      /usr/sfw/bin/wget --no-check-certificate -O /var/ldap/ipa.crt https://${PRIMESERVER}/ipa/config/ca.crt
+      dos2unix /var/ldap/ipa.crt
+      ;;
+    11)
+      /usr/bin/curl -k https://${PRIMESERVER}/ipa/config/ca.crt -O /var/ldap/ipa.crt
+      dos2unix /var/ldap/ipa.crt
+      ;;
+  esac
+
+  certutil -A -n "ca-cert" -i /var/ldap/ipa.crt -a -t CT -d /var/ldap
+}
+
+configure_kerberos() {
+  cat > /etc/krb5/krb5.conf <<EOF
+[libdefaults]
+default_realm = ${REALM}
+dns_lookup_kdc = true
+verify_ap_req_nofail = false
+
+[realms]
+${REALM} = {
+}
+
+[domain_realm]
+${DOMAIN} = ${REALM}
+.${DOMAIN} = ${REALM}
+
+[logging]
+default = FILE:/var/krb5/kdc.log
+kdc = FILE:/var/krb5/kdc.log
+kdc_rotate = {
+ period = 1d
+ version = 10
+}
+
+[appdefaults]
+kinit = {
+renewable = true
+forwardable= true
+}
+EOF
+
+  chown root:sys /etc/krb5/*
+  chmod 644 /etc/krb5/krb5.conf
+}
+
+test_ldapuser() {
+  ldaplist -l passwd admin
+
+  if [ $? -eq 0]; then
+    echo "** Success!"
+  else
+    echo "** Failed!"
+  fi
+}
+

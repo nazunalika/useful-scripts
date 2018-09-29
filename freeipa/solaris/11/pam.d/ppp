@@ -1,0 +1,6 @@
+auth requisite          pam_authtok_get.so.1
+auth required           pam_dhkeys.so.1
+auth required           pam_unix_cred.so.1
+auth required           pam_dial_auth.so.1
+auth sufficient         pam_unix_auth.so.1 server_policy
+auth required           pam_ldap.so.1
