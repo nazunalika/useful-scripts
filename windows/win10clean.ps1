@@ -11,6 +11,7 @@
 # 10/17/2017 - Fall Update
 # 04/30/2018 - Tested with April update - no changes
 # 08/11/2018 - Added more apps
+# 11/18/2018 - Added notes about new installs
 
 #############################################################################################
 # I am not a powershell scripter and I do not claim to be. A lot of the stuff I did here was
@@ -64,8 +65,14 @@ $DisableTelemetry = 1
 $DisableTelemetryEtcHosts = 1
 $EnableSkype = 1
 $UsabilityFeatures = 1
-$DisableDriverUpdates = 1
-$RestartComputer = 1
+# If you are using this during the final stages of an install ($OEM$ folders) this
+# should be set to 0 and the drivers you don't want updated should be manually selected
+# in device manager.
+$DisableDriverUpdates = 0
+# There is a problem where rebooting during the final stages poses problems for builds of 1809
+# and higher. This is disabled in my builds as a result. If you are running this after a full install
+# and you are on the deskop, then setting this to a 1 is fine.
+$RestartComputer = 0
 $ImportLayout = 1
 
 # All of our apps

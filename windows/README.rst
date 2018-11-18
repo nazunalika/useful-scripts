@@ -15,7 +15,7 @@ Here are the things you probably want to know about this script and what it does
  * Disables unneeded services
  * Disables xbox shenanigans
  * Enables true mouse/removes mouse accleration
- * Disables driver updates
+ * Disables driver updates (set to off/0 by default)
  * Disables sticky keys/ease of access
  * Disables Windows Update Seeding
  * Disables Cortana

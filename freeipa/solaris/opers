@@ -132,3 +132,15 @@ test_ldapuser() {
   fi
 }
 
+check_host_keytab() {
+  test -s /etc/krb5/krb5.keytab
+  if [ $? -eq 1 ]; then
+    echo "WARNING: It is recommended to pull the keytab from an IPA server."
+  fi
+}
+
+create_hostobject() {
+  # This is sort of difficult to do in Solaris because of the way curl was
+  # compiled in OpenCSW and Solaris 11.
+  :
+}

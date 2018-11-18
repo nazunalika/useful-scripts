@@ -9,10 +9,11 @@
 
 # Calling
 pull_certificate
+create_hostobject
 set_defaultdomain
 configure_nsswitch
 configure_ldap
 configure_kerberos
 configure_pam
 test_ldapuser
-
+check_host_keytab
