@@ -4,6 +4,14 @@
 # but I cannot guarantee results. Remove proxyDN and proxyPassword if this
 # is the case.
 
+check_current_config(){
+  grep -qi example ${DIR}/solaris/ipa.cfg
+  if [ $? -eq 0 ]; then
+    echo "Please modify your ipa.cfg"
+    exit 11
+  fi
+}
+
 configure_ldap() {
   # LDAP conf for sudo and utilities
   cat > /etc/ldap.conf <<EOF
@@ -48,10 +56,10 @@ EOF
 configure_nsswitch() {
   case $OSVER in
     10)
-      cp ./solaris/10/nsswitch.conf /etc/nsswitch.conf
+      cp ${DIR}/solaris/10/nsswitch.conf /etc/nsswitch.conf
       ;;
     11)
-      svccfg -s svc:/system/name-service/switch -f ./solaris/11/nsswitch.cfg
+      svccfg -s svc:/system/name-service/switch -f ${DIR}/solaris/11/nsswitch.cfg
       ;;
   esac
 }
@@ -60,11 +68,11 @@ configure_pam() {
   case $OSVER in
     10)
       cp /etc/pam.conf /etc/pam.conf.backup
-      cp ./solaris/10/pam.conf /etc/pam.conf
+      cp ${DIR}/solaris/10/pam.conf /etc/pam.conf
       ;;
     11)
       tar cf /root/pambackup.tar /etc/pam.d/*
-      cp ./solaris/11/pam.d/* /etc/pam.d/
+      cp ${DIR}/solaris/11/pam.d/* /etc/pam.d/
       ;;
   esac
 }
@@ -76,15 +84,14 @@ set_defaultdomain() {
 pull_certificate() {
   case $OSVER in
     10)
-      /usr/sfw/bin/wget --no-check-certificate -O /var/ldap/ipa.crt https://${PRIMESERVER}/ipa/config/ca.crt
-      dos2unix /var/ldap/ipa.crt
+      /usr/sfw/bin/wget --no-check-certificate -O ${PRIMECERT} https://${PRIMESERVER}/ipa/config/ca.crt
       ;;
     11)
-      /usr/bin/curl -k https://${PRIMESERVER}/ipa/config/ca.crt -O /var/ldap/ipa.crt
-      dos2unix /var/ldap/ipa.crt
+      /usr/bin/curl -k https://${PRIMESERVER}/ipa/config/ca.crt -O ${PRIMECERT}
       ;;
   esac
 
+  dos2unix ${PRIMECERT}
   certutil -A -n "ca-cert" -i /var/ldap/ipa.crt -a -t CT -d /var/ldap
 }
 
@@ -141,6 +148,16 @@ check_host_keytab() {
 
 create_hostobject() {
   # This is sort of difficult to do in Solaris because of the way curl was
-  # compiled in OpenCSW and Solaris 11.
-  :
+  # compiled in OpenCSW and Solaris 11. So we made python scripts to do it
+  # instead.
+  cat <<EOF | $SOLARIS_PYTHON
+from python_freeipa import Client
+client = Client('${DOMAIN}', version='2.215')
+client = Client('${PRIMESERVER}', version='2.215', verify_ssl='${PRIMECERT}')
+client.login('${MGRNAME}', '${MGRPASS}')
+adder = client.host_add('${FULLHOSTNAME}', force=${FORCEADD})
+if adder['dn']:
+    print "${FULLHOSTNAME} has been added successfully"
+
+EOF
 }

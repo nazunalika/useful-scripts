@@ -3,11 +3,16 @@
 # Solaris IPA Join Script
 # It is HIGHLY recommended to compile pam_hbac
 
+# Directory to avoid issues of calling scripts somewhere else and
+# it not getting sourced correctly
+export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+
 # Sources
-. ./solaris/vars
-. ./solaris/opers
+. ${DIR}/solaris/vars
+. ${DIR}/solaris/opers
 
 # Calling
+check_current_config
 pull_certificate
 create_hostobject
 set_defaultdomain

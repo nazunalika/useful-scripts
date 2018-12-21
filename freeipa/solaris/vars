@@ -1,16 +1,41 @@
 # ./solaris/vars
 
+# We are creating this function with python because in solaris 10, we have bash
+# version 3, which does not support associative arrays. To make it as backwards
+# compatiable as possible, we are calling python to parse a config. The same
+# config is going to be used in our other python script anyway.
+
+get_values() {
+  cat <<EOF | /usr/bin/python
+import ConfigParser
+config = ConfigParser.ConfigParser()
+config.read('${DIR}/solaris/ipa.cfg')
+print (config.get('IPA', '$1'))
+EOF
+}
+
 # Variables for IPA Join
-export DOMAIN="ipa.example.com"
-export REALM="IPA.EXAMPLE.COM"
-export BASEDN="dc=ipa,dc=example,dc=com"
-export DIGLIST=`dig _ldap._tcp.${DOMAIN} SRV +short | awk '{print $4}'| sort`
-export DIGPREF=`dig _ldap._tcp.${DOMAIN} SRV +short | awk '/^0 100/ {print $4}'`
-export PROXYDN="uid=solaris,cn=sysaccounts,cn=etc,${BASEDN}"
-export PROXYPASS="<<PASSWORD>>"
+DOMAIN=`get_values DOMAIN`
+REALM=`get_values REALM`
+BASEDN=`get_values BASEDN`
+DIGLIST=`/usr/sbin/dig _ldap._tcp.${DOMAIN} SRV +short | awk '{print $4}'| sort`
+DIGPREF=`/usr/sbin/dig _ldap._tcp.${DOMAIN} SRV +short | awk '/^0 100/ {print $4}'`
+PROXYUID=`get_values PROXYUID`
+PROXYDN="${PROXYUID},cn=sysaccounts,cn=etc,${BASEDN}"
+PROXYPASS=`get_values PROXYPASS`
+PRIMECERT=`get_values PRIMECERT`
+MGRNAME=`get_values MGRNAME`
+MGRPASS=`get_values MGRPASS`
+FORCEADD=`get_values FORCEADD`
 
 # Detect Solaris 10 or 11
-export OSVER="$(awk 'NR==1{print $3;}' /etc/release)"
+OSVER=`awk 'NR==1{print $3;}' /etc/release`
+
+# Get primary server
+PRIMESERVER=`echo ${DEFAULTLIST} | awk '{print $1}'`
+
+# Get full hostname
+FULLHOSTNAME=`hostname`.`domainname`
 
 # You may change these as you see fit. Some have seen success setting the
 # authMethod to "none", which should use kerberos. But it may require some pam
@@ -23,13 +48,31 @@ export OSVER="$(awk 'NR==1{print $3;}' /etc/release)"
 
 case "$OSVER" in
   10)
-    export authMethod="simple"
-    export DEFAULTLIST=`echo $DIGLIST | sed 's/com\./com/g'`
-    export PREFLIST=`echo $DIGPREF | sed 's/com\./com/g'`
+    authMethod="simple"
+    DEFAULTLIST=`echo $DIGLIST | sed 's/com\./com/g'`
+    PREFLIST=`echo $DIGPREF | sed 's/com\./com/g'`
+    SOLARIS_PYTHON=/opt/csw/bin/python2.7
   11)
-    export authMethod="tls:simple"
-    export DEFAULTLIST="${DIGLIST//.com./.com}"
-    export PREFLIST="${DIGPREF//.com./.com}"
+    authMethod="tls:simple"
+    DEFAULTLIST="${DIGLIST//.com./.com}"
+    PREFLIST="${DIGPREF//.com./.com}"
+    SOLARIS_PYTHON=/usr/bin/python
 esac
 
-export PRIMESERVER=`echo ${DEFAULTLIST} | awk '{print $1}'`
+# Exporting
+export DOMAIN
+export REALM
+export BASEDN
+export DIGLIST
+export DIGPREF
+export PROXYDN
+export PROXYPASS
+export PRIMECERT
+export OSVER
+export FULLHOSTNAME
+export FORCEADD
+export PRIMESERVER
+export authMethod
+export DEFAULTLIST
+export PREFLIST
+export SOLARIS_PYTHON
