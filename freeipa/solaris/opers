@@ -41,7 +41,7 @@ EOF
                     -a objectClassMap=passwd:posixAccount=posixaccount \
                     -a objectClassMap=group:posixGroup=posixgroup \
                     -a serviceSearchDescriptor=group:cn=groups,cn=compat,${BASEDN} \
-                    -a serviceSearchDescriptor=passwd:cn=users,cn=compat,${BASEDN} \
+                    -a serviceSearchDescriptor=passwd:cn=users,cn=accounts,${BASEDN} \
                     -a serviceSearchDescriptor=netgroup:cn=ng,cn=compat,${BASEDN} \
                     -a serviceSearchDescriptor=ethers:cn=computers,cn=accounts,${BASEDN} \
                     -a serviceSearchDescriptor=sudoers:ou=sudoers,${BASEDN} \
