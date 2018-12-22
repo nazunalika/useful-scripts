@@ -1,2 +1,3 @@
 # HBAC doesn't play well with sudo on solaris 11 when using AD users
+# Comment this if you don't use AD.
 account required pam_allow.so.1

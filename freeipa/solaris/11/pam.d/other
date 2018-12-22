@@ -5,15 +5,16 @@
 auth definitive         pam_user_policy.so.1
 auth requisite          pam_authtok_get.so.1
 auth required           pam_dhkeys.so.1
+auth sufficient         pam_krb5.so.1
 auth required           pam_unix_cred.so.1
 auth sufficient         pam_unix_auth.so.1 server_policy
-auth required           pam_ldap.so.1
+auth sufficient         pam_ldap.so.1
 
 account requisite       pam_roles.so.1
 account definitive      pam_user_policy.so.1
-account required        pam_tsol_account.so.1
 account binding         pam_unix_account.so.1 server_policy
-account required        pam_ldap.so.1
+account sufficient      pam_krb5.so.1
+account sufficient      pam_ldap.so.1
 #account required        pam_hbac.so ignore_unknown_user ignore_authinfo_unavail debug
 
 session definitive      pam_user_policy.so.1
@@ -22,4 +23,5 @@ session required        pam_unix_session.so.1
 
 password definitive     pam_user_policy.so.1
 password include        pam_authtok_common
+password sufficient     pam_krb5.so.1
 password required       pam_authtok_store.so.1 server_policy
