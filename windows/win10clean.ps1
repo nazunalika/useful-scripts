@@ -74,7 +74,7 @@ $DisableDriverUpdates = 0
 # and higher. This is disabled in my builds as a result. If you are running this after a full install
 # and you are on the deskop, then setting this to a 1 is fine.
 $RestartComputer = 0
-$ImportLayout = 1
+$ImportLayout = 0
 
 # All of our apps
 $applist = @(
@@ -134,6 +134,7 @@ $applist = @(
     "Microsoft.XboxGameCallableUI"
     "Microsoft.XboxSpeechToTextOverlay"
     "Microsoft.XboxGameOverlay"
+    "Microsoft.Xbox*"
     "*xboxapp*"
     "*minecraft*"
     "*MicrosoftOfficeHub*"
