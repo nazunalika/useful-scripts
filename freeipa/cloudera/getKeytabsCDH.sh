@@ -39,7 +39,7 @@ PRINC=$(echo $FULLPRINC | sed "s/\@$(echo $IPAREALM)//")
 
 01_createPrinc() {
   echo "INFO: Checking for existing principle"
-  if ipa service-find $FULLPRINC; then
+  if ! ipa service-find $FULLPRINC; then
     echo "INFO: Principle found"
   else
     echo "INFO: Not found, creating"
