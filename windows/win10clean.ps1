@@ -12,6 +12,7 @@
 # 04/30/2018 - Tested with April update - no changes
 # 08/11/2018 - Added more apps
 # 11/18/2018 - Added notes about new installs
+# 10/22/2019 - Prep for Windows 1908
 
 #############################################################################################
 # I am not a powershell scripter and I do not claim to be. A lot of the stuff I did here was
@@ -25,8 +26,10 @@
 
 #############################################################################################
 # Disclaimer: The user takes full responsibility running this script. This script comes with
-#             no warranties. Any damages or issues that occur with running this script is
-#             of the full responsibility of the owner of the system of which it was ran.
+#             no warranties. Any damages, issues, or loss of your job or contact with your
+#             family is of the full responsibility of the owner of the system of which it was
+#             ran.
+#
 #             In other words, I do not and will not support you.
 #
 
@@ -55,7 +58,7 @@
 # Shoot the J Ltd: This isn't a transition, it's a statement.™
 
 # Variables
-$RemoveApps = 0
+$RemoveApps = 1
 $RemoveOneDrive = 1
 $RemoveStore = 1
 $DisableServices = 1
