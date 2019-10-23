@@ -668,10 +668,12 @@ if ($UsabilityFeatures -eq 1) {
     Get-Service "SysMain" | Set-Service -StartupType Disabled -PassThru | Stop-Service
 
     # Remove bloated keys
+    New-PSDrive -PSProvider "Registry" -Root "HKEY_CLASSES_ROOT" -Name "HKCR"
     ForEach ($key in $bloatedKeys) {
         Write-Output "Removing $key"
         Remote-Item $key -Recurse -ErrorAction SilentlyContinue
     }
+    Remove-PSDrive "HKCR"
 }
 
 if ($DisableTelemetry -eq 1) {
