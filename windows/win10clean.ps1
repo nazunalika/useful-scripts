@@ -62,6 +62,7 @@ $RemoveApps = 1
 $RemoveOneDrive = 1
 $RemoveStore = 1
 $DisableServices = 1
+$DisableTasks = 1
 $DisableDefender = 1
 $EnableTrueMouse = 0
 $DisableTelemetry = 1
@@ -69,6 +70,7 @@ $DisableTelemetryEtcHosts = 1
 $EnableSkype = 1
 $UsabilityFeatures = 1
 $PrivacyTweaks = 1
+$TweakSSD = 0
 # If you are using this during the final stages of an install ($OEM$ folders) this
 # should be set to 0 and the drivers you don't want updated should be manually selected
 # in device manager.
@@ -95,9 +97,11 @@ $systemServices = @(
     "TrkWks"                                   # Distributed Link Tracking Client
     "WbioSrvc"                                 # Windows Biometric Service
     "WMPNetworkSvc"                            # Windows Media Player Network Sharing Service
+    #"wscsvc"                                  # Windows Security Center Service
     "XblAuthManager"                           # Xbox Live Auth Manager
     "XblGameSave"                              # Xbox Live Game Save Service
     "XboxNetApiSvc"                            # Xbox Live Networking Service
+    "ndu"                                      # Windows Network Data Usage Monitor
 )
 
 # Tasks
@@ -106,6 +110,57 @@ $defenderTasks = @(
     "\Microsoft\Windows\Windows Defender\Windows Defender Cleanup"
     "\Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan"
     "\Microsoft\Windows\Windows Defender\Windows Defender Verification"
+)
+
+$defaultTasks = @(
+    "\Microsoft\Windows\Windows Error Reporting\QueueReporting"
+    "\Microsoft\Windows\Mobile Broadband Accounts\MNO Metadata Parser"
+    "\Microsoft\Windows\Feedback\Siuf\DmClient"
+    "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector"
+    "\Microsoft\Windows\.NET Framework\.NET Framework NGEN v4.0.30319"
+    "\Microsoft\Windows\.NET Framework\.NET Framework NGEN v4.0.30319 64"
+    "\Microsoft\Windows\.NET Framework\.NET Framework NGEN v4.0.30319 64 Critical"
+    "\Microsoft\Windows\.NET Framework\.NET Framework NGEN v4.0.30319 Critical"
+    "\Microsoft\Windows\AppID\SmartScreenSpecific"
+    "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"
+    "\Microsoft\Windows\Application Experience\ProgramDataUpdater"
+    "\Microsoft\Windows\Autochk\Proxy"
+    "\Microsoft\Windows\CloudExperienceHost\CreateObjectTask"
+    "\Microsoft\Windows\Customer Experience Improvement Program\Consolidator"
+    "\Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask"
+    "\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip"
+}
+
+$bloatedKeys = @(
+    # Background Tasks
+    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
+    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
+    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
+    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+            
+    # Windows File
+    "HKCR:\Extensions\ContractId\Windows.File\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+            
+    # Delete some keys if Remove-Appx didn't take care of them (likely if xbox)
+    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
+    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
+    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+            
+    # Scheduled Tasks to delete
+    "HKCR:\Extensions\ContractId\Windows.PreInstalledConfigTask\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
+            
+    # Windows Protocol Keys
+    "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+    "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
+    "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+    "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+               
+    # Windows Share Target
+    "HKCR:\Extensions\ContractId\Windows.ShareTarget\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
 )
 
 # IP's and hosts
@@ -212,7 +267,6 @@ $telemetryDomains = @(
     "secure.flashtalking.com"
     "services.wes.df.telemetry.microsoft.com"
     "settings-sandbox.data.microsoft.com"
-    "settings-win.data.microsoft.com"
     "sls.update.microsoft.com.akadns.net"
     "sqm.df.telemetry.microsoft.com"
     "sqm.telemetry.microsoft.com"
@@ -226,7 +280,6 @@ $telemetryDomains = @(
     "telecommand.telemetry.microsoft.com"
     "telecommand.telemetry.microsoft.com.nsatc.net"
     "telemetry.appex.bing.net"
-    "telemetry.appex.bing.net:443"
     "telemetry.microsoft.com"
     "telemetry.urs.microsoft.com"
     "vortex-bn2.metron.live.com.nsatc.net"
@@ -245,14 +298,38 @@ $telemetryDomains = @(
     "www.bingads.microsoft.com"
     "www.go.microsoft.akadns.net"
     "www.msftncsi.com"
+    "client.wns.windows.com"
+    "wdcpalt.microsoft.com"
+    "settings-ssl.xboxlive.com"
+    "settings-ssl.xboxlive.com-c.edgekey.net"
+    "settings-ssl.xboxlive.com-c.edgekey.net.globalredir.akadns.net"
+    "e87.dspb.akamaidege.net"
+    "insiderservice.microsoft.com"
+    "insiderservice.trafficmanager.net"
+    "e3843.g.akamaiedge.net"
+    "flightingserviceweurope.cloudapp.net"
+    "static.ads-twitter.com"
+    "www-google-analytics.l.google.com"
+    "p.static.ads-twitter.com"
+    "hubspot.net.edge.net"
+    "e9483.a.akamaiedge.net"
+    "stats.g.doubleclick.net"
+    "stats.l.doubleclick.net"
+    "adservice.google.de"
+    "adservice.google.com"
+    "googleads.g.doubleclick.net"
+    "pagead46.l.doubleclick.net"
+    "hubspot.net.edgekey.net"
+    "insiderppe.cloudapp.net"
+    "livetileedge.dsx.mp.microsoft.com"
     "fe2.update.microsoft.com.akadns.net"
     "s0.2mdn.net"
-    "statsfe2.update.microsoft.com.akadns.net",
+    "statsfe2.update.microsoft.com.akadns.net"
     "survey.watson.microsoft.com"
     "view.atdmt.com"
-    "watson.microsoft.com",
+    "watson.microsoft.com"
     "watson.ppe.telemetry.microsoft.com"
-    "watson.telemetry.microsoft.com",
+    "watson.telemetry.microsoft.com"
     "watson.telemetry.microsoft.com.nsatc.net"
     "wes.df.telemetry.microsoft.com"
     "m.hotmail.com"
@@ -279,6 +356,19 @@ $WhiteListedApps = @(
     "Microsoft.DesktopAppInstaller"
 )
 
+$syncGroups = @(
+    "Accessibility"
+    "AppSync"
+    "BrowserSettings"
+    "Credentials"
+    "DesktopTheme"
+    "Language"
+    "PackageState"
+    "Personalization"
+    "StartLayout"
+    "Windows"
+)
+
 # Files
 $etcHosts = "$env:systemroot\System32\drivers\etc\hosts"
 
@@ -287,6 +377,39 @@ function mkdir-forceful($path) {
     if (!(Test-Path $path)) {
         New-Item -ItemType Directory -Force -Path $path
     }
+}
+
+function reg-takeown($key) {
+    switch ($key.split('\')[0]) {
+        "HKEY_CLASSES_ROOT" {
+            $reg = [Microsoft.Win32.Registry]::ClassesRoot
+            $key = $key.substring(18)
+        }
+        "HKEY_CURRENT_USER" {
+            $reg = [Microsoft.Win32.Registry]::CurrentUser
+            $key = $key.substring(18)
+        }
+        "HKEY_LOCAL_MACHINE" {
+            $reg = [Microsoft.Win32.Registry]::LocalMachine
+            $key = $key.substring(19)
+        }
+    }
+
+    # Administrators Group (built-in)
+    $admins = New-Object System.Security.Principal.SecurityIdentifier("S-1-5-32-544")
+    $admins = $admins.Translate([System.Security.Principal.NTAccount])
+
+    # Set ownership here
+    $key = $reg.OpenSubKey($key, "ReadWriteSubTree", "TakeOwnership")
+    $acl = $key.GetAccessControl()
+    $acl.SetOwner($admins)
+    $key.SetAccessControl($acl)
+
+    # Full Control
+    $acl = $key.GetAccessControl()
+    $rule = New-Object System.Security.AccessControl.RegistryAccessRule($admins, "FullControl", "Allow")
+    $acl.SetAccessRule($rule)
+    $key.SetAccessControl($acl)
 }
 
 function show-message($info) {
@@ -415,6 +538,15 @@ if ($DisableServices -eq '1') {
     }
 }
 
+if ($DisableTasks -eq '1') {
+    foreach ($task in $defaultTasks) {
+        $parts = $task.split('\')
+        $name = $parts[-1]
+        $path = $parts[0..($parts.length-2)] -join '\'
+        Disable-ScheduledTask -TaskName "$name" -TaskPath "$path" -ErrorAction SilentlyContinue
+    }
+}
+
 # You would be an idiot to leave this garbage enabled
 If ($DisableDefender -eq '1') {
     # Disable the annoying tray
@@ -428,7 +560,6 @@ If ($DisableDefender -eq '1') {
         $parts = $x.split('\')
         $name = $parts[-1]
         $path = $parts[0..($parts.length-2)] -join '\'
-
         Disable-ScheduledTask -TaskName "$name" -TaskPath "$path"
     }
     # GP
@@ -452,6 +583,11 @@ If ($DisableDefender -eq '1') {
     # Apparently there's a context menu. Found that out today.
     show-message "Defender context menu"
     si "HKLM:\SOFTWARE\Classes\CLSID\{09A47860-11B0-4DA5-AFA5-26D86198A780}\InprocServer32" ""
+
+    # Disable windows defender finding things
+    reg-takeown("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Spynet")
+    sp "HKLM:\SOFTWARE\Microsoft\Windows Defender\Spynet" "SpyNetReporting" 0
+    sp "HKLM:\SOFTWARE\Microsoft\Windows Defender\Spynet" "SubmitSamplesConsent" 0
 }
 
 # This basically applies "true mouse", or MarkC's "Mouse Acceleration Fix"
@@ -498,10 +634,6 @@ if ($UsabilityFeatures -eq 1) {
     show-message "Disable Windows Update Seeding"
     mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization"
     sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization" "DODownloadMode" 0
-    # Disable cortana
-    show-message "Disabling cortana by policy"
-    mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
-    sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" "AllowCortana" 0
     if ($DisableDriverUpdates -eq 1) {
         # Disable driver updates
         show-warning "Disabling automatic driver updates"
@@ -527,6 +659,7 @@ if ($UsabilityFeatures -eq 1) {
     sp "Registry::HKU\Default_User\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" "PeopleBand" 0
     reg unload HKU\Default_User
 	
+    Get-ScheduledTask -TaskName XblGameSaveTaskLogon | Disable-ScheduledTask -ErrorAction SilentlyContinue
     Get-ScheduledTask -TaskName XblGameSaveTask | Disable-ScheduledTask -ErrorAction SilentlyContinue
     Get-ScheduledTask -TaskName Consolidator | Disable-ScheduledTask -ErrorAction SilentlyContinue
     Get-ScheduledTask -TaskName UsbCeip | Disable-ScheduledTask -ErrorAction SilentlyContinue
@@ -544,12 +677,34 @@ if ($UsabilityFeatures -eq 1) {
     If (Test-Path $Holo) {
         Set-ItemProperty $Holo -Name FirstRunSucceeded -Value 0 -Verbose
     }
+
+    # This disable last access time on everything. Set it to 0 if you care about
+    # last access times. Maybe a good idea to keep it on so you know if maybe
+    # an auto script or something ran. How else would you know?
+    if ($TweakSSD -eq 1) {
+        fsutil behavior set DisableLastAccess 1
+        fsutil behavior set EncryptPagingFile 0 
+    }
+
+    # Disable memory compression as well as superfetch (SysMain)
+    Disable-MMAgent -mc
+    Get-Service "SysMain" | Set-Service -StartupType Disabled -PassThru | Stop-Service
+
+    # Remove bloated keys
+    ForEach ($key in $bloatedKeys) {
+        Write-Output "Removing $key"
+        Remote-Item $key -Recurse
+    }
 }
 
 if ($DisableTelemetry -eq 1) {
     show-message "Disable Telemetry"
     mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
+    mkdir-forceful "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
+    mkdir-forceful "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
     sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection" "AllowTelemetry" 0
+    sp "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" "AllowTelemetry" 0
+    sp "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection" "AllowTelemetry" 0
 
     if ($DisableTelemetryEtcHosts -eq 1) {
         show-message "Disable Telemetry in \etc\hosts"
@@ -595,15 +750,103 @@ if ($PrivacyTweaks -eq 1) {
     mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
     sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" "DisableWebSearch" 1
 
-    $Period1 = 'HKCU:\Software\Microsoft\Siuf'
-    $Period2 = 'HKCU:\Software\Microsoft\Siuf\Rules'
-    $Period3 = 'HKCU:\Software\Microsoft\Siuf\Rules\PeriodInNanoSeconds'
-    If (!(Test-Path $Period3)) { 
-        mkdir $Period1 -ErrorAction SilentlyContinue
-        mkdir $Period2 -ErrorAction SilentlyContinue
-        mkdir $Period3 -ErrorAction SilentlyContinue
-        New-ItemProperty $Period3 -Name PeriodInNanoSeconds -Value 0 -Verbose -ErrorAction SilentlyContinue
-}
+    $Period = "HKCU:\Software\Microsoft\Siuf\Rules"
+    If (!(Test-Path $Period)) { 
+        New-Item $Period
+        Set-ItemProperty $Period PeriodInNanoSeconds -Value 0
+    }
+    # Disable cortana's shady tracking
+    show-message "Disabling cortana by policy"
+    mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
+    sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" "AllowCortana" 0
+
+    $cortanaReg1 = "HKCU:\SOFTWARE\Microsoft\Personalization\Settings"
+    $cortanaReg2 = "HKCU:\SOFTWARE\Microsoft\InputPersonalization"
+    $cortanaReg3 = "HKCU:\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore"
+
+    If (!(Test-Path $cortanaReg1)) {
+        mkdir-forceful $cortanaReg1
+    }
+    sp "$cortanaReg1" "AcceptedPrivacyPolicy" 0
+
+    If (!(Test-Path $cortanaReg2)) {
+        mkdir-forceful $cortanaReg2
+    }
+    sp "$cortanaReg2" "RestrictImplicitTextCollection" 1
+    sp "$cortanaReg2" "RestrictImplicitInkCollection" 1
+
+    If (!(Test-Path $cortanaReg3)) {
+        mkdir-forceful $cortanaReg3
+    }
+
+    sp "$cortanaReg3" "HarvestContacts" 0
+
+    # Disable web results
+    Set-WindowsSearchSetting -EnableWebResultsSetting $false
+    
+    # Disable TIPC
+    mkdir-forceful "HKCU:\SOFTWARE\Microsoft\Input\TIPC"
+    sp "HKCU:\SOFTWARE\Microsoft\Input\TIPC" "Enabled" 0
+ 
+    # Smart screen
+    sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppHost" "EnableWebContentEvaluation" 0
+
+    # Disable all syncing
+    sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\SettingSync" "BackupPolicy" 0x3c
+    sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\SettingSync" "DeviceMetadataUploaded" 0
+    sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\SettingSync" "PriorLogons" 1
+    foreach ($group in $syncGroups) {
+        mkdir-forceful "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\SettingSync\Groups\$group"
+        sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\SettingSync\Groups\$group" "Enabled" 0
+    }
+
+    # Disable background access of default apps (especially shit we couldn't remove)
+    foreach ($key in (Get-ChildItem "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications")) {
+        Set-ItemProperty ("HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications\" + $key.PSChildName) "Disabled" 1
+    }
+
+    # Disable location sensor
+    mkdir-forceful "HKCU:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Permissions\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
+    sp "HKCU:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Permissions\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}" "SensorPermissionState" 0
+
+    # Do not share wifi networks
+    $user = New-Object System.Security.Principal.NTAccount($env:UserName)
+    $sid = $user.Translate([System.Security.Principal.SecurityIdentifier]).value
+    mkdir-forceful ("HKLM:\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\features\" + $sid)
+    sp ("HKLM:\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\features\" + $sid) "FeatureStates" 0x33c
+    sp "HKLM:\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\features" "WiFiSenseCredShared" 0
+    sp "HKLM:\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\features" "WiFiSenseOpen" 0
+
+    $WifiSense1 = "HKLM:\SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting"
+    $WifiSense2 = "HKLM:\SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots"
+    $WifiSense3 = "HKLM:\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config"
+
+    If (!(Test-Path $WifiSense1)) {
+        New-Item $WifiSense1
+    }
+    Set-ItemProperty $WifiSense1  Value -Value 0 
+    If (!(Test-Path $WifiSense2)) {
+        New-Item $WifiSense2
+    }
+    sp "$WifiSense2" "Value" 0
+    sp "$WifiSense3" "AutoConnectAllowedOEM" 0
+
+    # Disable push notifications/live tiles
+    $Live = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications"    
+    If (!(Test-Path $Live)) {      
+        New-Item $Live
+    }
+    sp "$Live" "NoTileApplicationNotification" 1
+
+    # Some edge settings
+    mkdir-forceful "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main"
+    sp "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main" "DoNotTrack" 1
+    mkdir-forceful "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\User\Default\SearchScopes"
+    sp "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\User\Default\SearchScopes" "ShowSearchSuggestionsGlobal" 0
+    mkdir-forceful "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\FlipAhead"
+    sp "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\FlipAhead" "FPEnabled" 0
+    mkdir-forceful "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\PhishingFilter"
+    sp "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\PhishingFilter" "EnabledV9" 0
 }
 
 if ($ImportLayout -eq 1) {
