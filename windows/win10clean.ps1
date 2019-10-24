@@ -71,6 +71,10 @@ $EnableSkype = 1
 $UsabilityFeatures = 1
 $PrivacyTweaks = 1
 $TweakSSD = 0
+# Set to 0 under the following conditions:
+#  -> You have 16gb of ram and feel like it'll benefit you because you're a baller
+#  -> You have 32gb of ram or more
+$MemoryCompression = 1
 # If you are using this during the final stages of an install ($OEM$ folders) this
 # should be set to 0 and the drivers you don't want updated should be manually selected
 # in device manager.
@@ -664,8 +668,10 @@ if ($UsabilityFeatures -eq 1) {
     }
 
     # Disable memory compression as well as superfetch (SysMain)
-    Disable-MMAgent -mc
-    Get-Service "SysMain" | Set-Service -StartupType Disabled -PassThru | Stop-Service
+    if ($MemoryCompression -eq 0) {
+        Disable-MMAgent -mc
+        Get-Service "SysMain" | Set-Service -StartupType Disabled -PassThru | Stop-Service
+    }
 
     # Remove bloated keys
     New-PSDrive -PSProvider "Registry" -Root "HKEY_CLASSES_ROOT" -Name "HKCR"
@@ -729,9 +735,9 @@ if ($PrivacyTweaks -eq 1) {
     mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
     sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" "DisableWebSearch" 1
 
-    $Period = "HKCU:\Software\Microsoft\Siuf\Rules"
+    $Period = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
     If (!(Test-Path $Period)) { 
-        New-Item $Period
+        mkdir-forceful $Period
         Set-ItemProperty $Period PeriodInNanoSeconds -Value 0
     }
     # Disable cortana's shady tracking
