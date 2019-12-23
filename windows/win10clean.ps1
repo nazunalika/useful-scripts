@@ -13,6 +13,7 @@
 # 08/11/2018 - Added more apps
 # 11/18/2018 - Added notes about new installs
 # 10/22/2019 - Prep for Windows 1908
+# 12/23/2019 - Discovered spelling mistakes and removed 'try'
 
 #############################################################################################
 # I am not a powershell scripter and I do not claim to be. A lot of the stuff I did here was
@@ -71,10 +72,6 @@ $EnableSkype = 1
 $UsabilityFeatures = 1
 $PrivacyTweaks = 1
 $TweakSSD = 0
-# Set to 0 under the following conditions:
-#  -> You have 16gb of ram and feel like it'll benefit you because you're a baller
-#  -> You have 32gb of ram or more
-$MemoryCompression = 1
 # If you are using this during the final stages of an install ($OEM$ folders) this
 # should be set to 0 and the drivers you don't want updated should be manually selected
 # in device manager.
@@ -133,7 +130,7 @@ $defaultTasks = @(
     "\Microsoft\Windows\Customer Experience Improvement Program\Consolidator"
     "\Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask"
     "\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip"
-}
+)
 
 $bloatedKeys = @(
     # Background Tasks
@@ -447,14 +444,17 @@ If ($RemoveApps -eq '1') {
     sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" "SystemPaneSuggestionsEnabled" 0
     sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" "SoftLandingEnabled" 0
 
-try {
+
     Write-Host "Remove the following Built-in apps:" -ForegroundColor Green 
-    $apps = Get-AppxProvisionedPackage -Path $pathworkfolder  | ForEach-Object {
+    $apps = Get-AppxProvisionedPackage -Online  | ForEach-Object {
         if (($_.DisplayName -notin $WhiteListedApps)) {
             Write-Host "Delete:" $_.DisplayName -ForegroundColor Green
             Remove-AppxPackage -Package $_.PackageName
+            sleep 3
             Remove-AppxPackage -Package $_.PackageName -AllUsers
-            Remove-AppxProvisionedPackage -Online -PackageName $_.PackageName 
+            sleep 3
+            Remove-AppxProvisionedPackage -Online -PackageName $_.PackageName
+            sleep 3
             $call = ""
         }
     }
@@ -668,18 +668,14 @@ if ($UsabilityFeatures -eq 1) {
     }
 
     # Disable memory compression as well as superfetch (SysMain)
-    if ($MemoryCompression -eq 0) {
-        Disable-MMAgent -mc
-        Get-Service "SysMain" | Set-Service -StartupType Disabled -PassThru | Stop-Service
-    }
+    Disable-MMAgent -mc
+    Get-Service "SysMain" | Set-Service -StartupType Disabled -PassThru | Stop-Service
 
     # Remove bloated keys
-    New-PSDrive -PSProvider "Registry" -Root "HKEY_CLASSES_ROOT" -Name "HKCR"
     ForEach ($key in $bloatedKeys) {
         Write-Output "Removing $key"
-        Remote-Item $key -Recurse -ErrorAction SilentlyContinue
+        Remove-Item $key -Recurse -ErrorAction SilentlyContinue
     }
-    Remove-PSDrive "HKCR"
 }
 
 if ($DisableTelemetry -eq 1) {
@@ -735,9 +731,9 @@ if ($PrivacyTweaks -eq 1) {
     mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
     sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" "DisableWebSearch" 1
 
-    $Period = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
+    $Period = "HKCU:\Software\Microsoft\Siuf\Rules"
     If (!(Test-Path $Period)) { 
-        mkdir-forceful $Period
+        New-Item $Period
         Set-ItemProperty $Period PeriodInNanoSeconds -Value 0
     }
     # Disable cortana's shady tracking
@@ -847,4 +843,3 @@ if ($RestartComputer -eq 1) {
     show-message "Starting Explorer"
     start "explorer.exe"
 }
-
