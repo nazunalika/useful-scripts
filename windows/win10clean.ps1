@@ -13,7 +13,7 @@
 # 08/11/2018 - Added more apps
 # 11/18/2018 - Added notes about new installs
 # 10/22/2019 - Prep for Windows 1908
-# 12/23/2019 - Discovered spelling mistakes and removed 'try'
+# 12/30/2019 - Fixed hosts and added other things
 
 #############################################################################################
 # I am not a powershell scripter and I do not claim to be. A lot of the stuff I did here was
@@ -191,65 +191,85 @@ $telemetryDomains = @(
     "a-0007.a-msedge.net"
     "a-0008.a-msedge.net"
     "a-0009.a-msedge.net"
+    "a-0010.a-msedge.net"
+    "a-0011.a-msedge.net"
+    "a-0012.a-msedge.net"
+    "a-msedge.net"
+    "a.ads1.msn.com"
+    "a.ads2.msads.net"
+    "a.ads2.msn.com"
+    "a.rad.msn.com"
     "a1621.g.akamai.net"
     "a1856.g2.akamai.net"
     "a1961.g.akamai.net"
     "a978.i6g1.akamai.net"
-    "a.ads1.msn.com"
-    "a.ads2.msads.net"
-    "a.ads2.msn.com"
     "ac3.msn.com"
     "ad.doubleclick.net"
     "adnexus.net"
     "adnxs.com"
+    "ads.msn.com"
     "ads1.msads.net"
     "ads1.msn.com"
-    "ads.msn.com"
+    "adservice.google.com"
+    "adservice.google.de"
     "aidps.atdmt.com"
     "aka-cdn-ns.adtech.de"
-    "a-msedge.net"
     "any.edge.bing.com"
-    "a.rad.msn.com"
     "az361816.vo.msecnd.net"
     "az512334.vo.msecnd.net"
     "b.ads1.msn.com"
     "b.ads2.msads.net"
-    "bingads.microsoft.com"
     "b.rad.msn.com"
+    "bingads.microsoft.com"
     "bs.serving-sys.com"
     "c.atdmt.com"
     "cdn.atdmt.com"
     "cds26.ams9.msecn.net"
     "choice.microsoft.com"
     "choice.microsoft.com.nsatc.net"
+    "client.wns.windows.com"
     "compatexchange.cloudapp.net"
-    "corpext.msitadfs.glbdns2.microsoft.com"
     "corp.sts.microsoft.com"
+    "corpext.msitadfs.glbdns2.microsoft.com"
     "cs1.wpc.v0cdn.net"
+    "cy2.vortex.data.microsoft.com.akadns.net"
     "db3aqu.atdmt.com"
     "df.telemetry.microsoft.com"
     "diagnostics.support.microsoft.com"
     "e2835.dspb.akamaiedge.net"
+    "e3843.g.akamaiedge.net"
     "e7341.g.akamaiedge.net"
     "e7502.ce.akamaiedge.net"
     "e8218.ce.akamaiedge.net"
+    "e87.dspb.akamaidege.net"
+    "e9483.a.akamaiedge.net"
     "ec.atdmt.com"
+    "fe2.update.microsoft.com.akadns.net"
     "fe2.update.microsoft.com.akadns.net"
     "feedback.microsoft-hohm.com"
     "feedback.search.microsoft.com"
     "feedback.windows.com"
     "flex.msn.com"
+    "flightingserviceweurope.cloudapp.net"
     "g.msn.com"
+    "googleads.g.doubleclick.net"
     "h1.msn.com"
     "h2.msn.com"
     "hostedocsp.globalsign.com"
+    "hubspot.net.edge.net"
+    "hubspot.net.edgekey.net"
     "i1.services.social.microsoft.com"
     "i1.services.social.microsoft.com.nsatc.net"
+    "insiderppe.cloudapp.net"
+    "insiderservice.microsoft.com"
+    "insiderservice.trafficmanager.net"
     "ipv6.msftncsi.com"
     "ipv6.msftncsi.com.edgesuite.net"
     "lb1.www.ms.akadns.net"
     "live.rads.msn.com"
+    "livetileedge.dsx.mp.microsoft.com"
     "m.adnxs.com"
+    "m.hotmail.com"
     "msedge.net"
     "msftncsi.com"
     "msnbot-65-55-108-23.search.msn.com"
@@ -257,83 +277,64 @@ $telemetryDomains = @(
     "oca.telemetry.microsoft.com"
     "oca.telemetry.microsoft.com.nsatc.net"
     "onesettings-db5.metron.live.nsatc.net"
+    "p.static.ads-twitter.com"
+    "pagead46.l.doubleclick.net"
     "pre.footprintpredict.com"
     "preview.msn.com"
     "rad.live.com"
     "rad.msn.com"
     "redir.metaservices.microsoft.com"
     "reports.wes.df.telemetry.microsoft.com"
+    "s0.2mdn.net"
     "schemas.microsoft.akadns.net"
     "secure.adnxs.com"
     "secure.flashtalking.com"
     "services.wes.df.telemetry.microsoft.com"
     "settings-sandbox.data.microsoft.com"
-    "sls.update.microsoft.com.akadns.net"
+    "settings-ssl.xboxlive.com"
+    "settings-ssl.xboxlive.com-c.edgekey.net"
+    "settings-ssl.xboxlive.com-c.edgekey.net.globalredir.akadns.net"
     "sqm.df.telemetry.microsoft.com"
     "sqm.telemetry.microsoft.com"
     "sqm.telemetry.microsoft.com.nsatc.net"
     "ssw.live.com"
     "static.2mdn.net"
+    "static.ads-twitter.com"
+    "stats.g.doubleclick.net"
+    "stats.l.doubleclick.net"
     "statsfe1.ws.microsoft.com"
     "statsfe2.update.microsoft.com.akadns.net"
+    "statsfe2.update.microsoft.com.akadns.net"
     "statsfe2.ws.microsoft.com"
+    "survey.watson.microsoft.com"
     "survey.watson.microsoft.com"
     "telecommand.telemetry.microsoft.com"
     "telecommand.telemetry.microsoft.com.nsatc.net"
     "telemetry.appex.bing.net"
     "telemetry.microsoft.com"
     "telemetry.urs.microsoft.com"
+    "view.atdmt.com"
     "vortex-bn2.metron.live.com.nsatc.net"
     "vortex-cy2.metron.live.com.nsatc.net"
-    "vortex.data.microsoft.com"
     "vortex-sandbox.data.microsoft.com"
-    "vortex-win.data.microsoft.com"
-    "cy2.vortex.data.microsoft.com.akadns.net"
+    "vortex.data.microsoft.com"
     "watson.live.com"
     "watson.microsoft.com"
+    "watson.microsoft.com"
+    "watson.ppe.telemetry.microsoft.com"
     "watson.ppe.telemetry.microsoft.com"
     "watson.telemetry.microsoft.com"
+    "watson.telemetry.microsoft.com"
     "watson.telemetry.microsoft.com.nsatc.net"
+    "watson.telemetry.microsoft.com.nsatc.net"
+    "wdcpalt.microsoft.com"
+    "wes.df.telemetry.microsoft.com"
     "wes.df.telemetry.microsoft.com"
     "win10.ipv6.microsoft.com"
+    "www-google-analytics.l.google.com"
     "www.bingads.microsoft.com"
     "www.go.microsoft.akadns.net"
     "www.msftncsi.com"
-    "client.wns.windows.com"
-    "wdcpalt.microsoft.com"
-    "settings-ssl.xboxlive.com"
-    "settings-ssl.xboxlive.com-c.edgekey.net"
-    "settings-ssl.xboxlive.com-c.edgekey.net.globalredir.akadns.net"
-    "e87.dspb.akamaidege.net"
-    "insiderservice.microsoft.com"
-    "insiderservice.trafficmanager.net"
-    "e3843.g.akamaiedge.net"
-    "flightingserviceweurope.cloudapp.net"
-    "static.ads-twitter.com"
-    "www-google-analytics.l.google.com"
-    "p.static.ads-twitter.com"
-    "hubspot.net.edge.net"
-    "e9483.a.akamaiedge.net"
-    "stats.g.doubleclick.net"
-    "stats.l.doubleclick.net"
-    "adservice.google.de"
-    "adservice.google.com"
-    "googleads.g.doubleclick.net"
-    "pagead46.l.doubleclick.net"
-    "hubspot.net.edgekey.net"
-    "insiderppe.cloudapp.net"
-    "livetileedge.dsx.mp.microsoft.com"
-    "fe2.update.microsoft.com.akadns.net"
-    "s0.2mdn.net"
-    "statsfe2.update.microsoft.com.akadns.net"
-    "survey.watson.microsoft.com"
-    "view.atdmt.com"
-    "watson.microsoft.com"
-    "watson.ppe.telemetry.microsoft.com"
-    "watson.telemetry.microsoft.com"
-    "watson.telemetry.microsoft.com.nsatc.net"
-    "wes.df.telemetry.microsoft.com"
-    "m.hotmail.com"
 )
 
 $telemetrySkypeDomains = @(
@@ -435,6 +436,7 @@ If ($RemoveApps -eq '1') {
     mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
     sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent" "DisableWindowsConsumerFeatures" 1
     sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent" "DisableSoftLanding" 1
+    sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent" "DisableTailoredExperiencesWithDiagnosticData" 1
 
     sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" "ContentDeliveryAllowed" 0
     sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" "OemPreInstalledAppsEnabled" 0
@@ -639,14 +641,16 @@ if ($UsabilityFeatures -eq 1) {
     sp "Registry::HKU\Default_User\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" "ShowSyncProviderNotifications" 0
     sp "Registry::HKU\Default_User\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" "PeopleBand" 0
     reg unload HKU\Default_User
-	
+    
     Get-ScheduledTask -TaskName XblGameSaveTaskLogon | Disable-ScheduledTask -ErrorAction SilentlyContinue
     Get-ScheduledTask -TaskName XblGameSaveTask | Disable-ScheduledTask -ErrorAction SilentlyContinue
     Get-ScheduledTask -TaskName Consolidator | Disable-ScheduledTask -ErrorAction SilentlyContinue
     Get-ScheduledTask -TaskName UsbCeip | Disable-ScheduledTask -ErrorAction SilentlyContinue
     Get-ScheduledTask -TaskName DmClient | Disable-ScheduledTask -ErrorAction SilentlyContinue
     Get-ScheduledTask -TaskName DmClientOnScenarioDownload | Disable-ScheduledTask -ErrorAction SilentlyContinue
-	
+    Get-ScheduledTask -TaskName "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" | Disable-ScheduledTask -ErrorAction SilentlyContinue
+	Get-ScheduledTask -TaskName "Microsoft\Windows\Autochk\Proxy" | Disable-ScheduledTask -ErrorAction SilentlyContinue
+    
     $CloudStore = 'HKCUSoftware\Microsoft\Windows\CurrentVersion\CloudStore'
     If (Test-Path $CloudStore) {
         Stop-Process Explorer.exe -Force
@@ -659,6 +663,8 @@ if ($UsabilityFeatures -eq 1) {
         Set-ItemProperty $Holo -Name FirstRunSucceeded -Value 0 -Verbose
     }
 
+    Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search' -Name 'SearchboxTaskbarMode' -Type DWord -Value 0
+
     # This disable last access time on everything. Set it to 0 if you care about
     # last access times. Maybe a good idea to keep it on so you know if maybe
     # an auto script or something ran. How else would you know?
@@ -668,8 +674,8 @@ if ($UsabilityFeatures -eq 1) {
     }
 
     # Disable memory compression as well as superfetch (SysMain)
-    Disable-MMAgent -mc
-    Get-Service "SysMain" | Set-Service -StartupType Disabled -PassThru | Stop-Service
+    #Disable-MMAgent -mc
+    #Get-Service "SysMain" | Set-Service -StartupType Disabled -PassThru | Stop-Service
 
     # Remove bloated keys
     ForEach ($key in $bloatedKeys) {
@@ -683,15 +689,16 @@ if ($DisableTelemetry -eq 1) {
     mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
     mkdir-forceful "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
     mkdir-forceful "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-    sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection" "AllowTelemetry" 0
-    sp "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" "AllowTelemetry" 0
-    sp "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection" "AllowTelemetry" 0
+    Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection' -Name 'AllowTelemetry' -Type DWord -Value 0
+    Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection' -Name 'AllowTelemetry' -Type DWord -Value 0
+    Set-ItemProperty -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection' -Name 'AllowTelemetry' -Type DWord -Value 0
 
     if ($DisableTelemetryEtcHosts -eq 1) {
         show-message "Disable Telemetry in \etc\hosts"
         foreach ($x in $telemetryDomains) {
         if (-Not (Select-String -Path $etcHosts -Pattern $x)) {
             echo "0.0.0.0 $x" | Out-File -Encoding ASCII -Append $etcHosts
+            echo ":: $x"      | Out-File -Encoding ASCII -Append $etcHosts
             }
         }
     }
@@ -702,6 +709,7 @@ if ($DisableTelemetry -eq 1) {
         foreach ($x in $telemetrySkypeDomains) {
         if (-Not (Select-String -Path $etcHosts -Pattern $x)) {
             echo "0.0.0.0 $x" | Out-File -Encoding ASCII -Append $etcHosts
+            echo ":: $x"      | Out-File -Encoding ASCII -Append $etcHosts
             }
         }
     }
@@ -710,7 +718,7 @@ if ($DisableTelemetry -eq 1) {
 if ($PrivacyTweaks -eq 1) {
     foreach ($key in (Get-ChildItem "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications")) {
         sp ("HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications\" + $key.PSChildName) "Disabled" 1
-	}
+    }
     mkdir-forceful "HKCU:\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore"
     sp "HKCU:\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore" "HarvestContacts" 0
 
@@ -727,23 +735,32 @@ if ($PrivacyTweaks -eq 1) {
     }
 
     sp "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo" "Enabled" 0
+    sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo" "Enabled" 0
+    sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy" "Enabled" 0
+    sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy" "TailoredExperiencesWithDiagnosticDataEnabled" 0
     sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" "BingSearchEnabled" 0
     mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
     sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" "DisableWebSearch" 1
+    sp "HKLM:\SOFTWARE\Policies\Microsoft\InputPersonalization" "AllowInputPersonalization" 0
 
     $Period = "HKCU:\Software\Microsoft\Siuf\Rules"
     If (!(Test-Path $Period)) { 
-        New-Item $Period
+        New-Item -Force $Period
         Set-ItemProperty $Period PeriodInNanoSeconds -Value 0
+        Set-ItemProperty $Period NumberOfSIUFInPeriod -Value 0
     }
     # Disable cortana's shady tracking
     show-message "Disabling cortana by policy"
     mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
     sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" "AllowCortana" 0
+    sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" "AllowCortanaAboveLock" 0
+    sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" "ConnectedSearchUseWeb" 1
+    sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" "ConnectedSearchPrivacy" 3
 
     $cortanaReg1 = "HKCU:\SOFTWARE\Microsoft\Personalization\Settings"
     $cortanaReg2 = "HKCU:\SOFTWARE\Microsoft\InputPersonalization"
     $cortanaReg3 = "HKCU:\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore"
+    $cortanaReg4 = "HKCU:\SOFTWARE\Microsoft\Speech_OneCore\Preferences"
 
     If (!(Test-Path $cortanaReg1)) {
         mkdir-forceful $cortanaReg1
@@ -759,8 +776,12 @@ if ($PrivacyTweaks -eq 1) {
     If (!(Test-Path $cortanaReg3)) {
         mkdir-forceful $cortanaReg3
     }
-
     sp "$cortanaReg3" "HarvestContacts" 0
+
+    If (!(Test-Path $cortanaReg4)) {
+        mkdir-forceful $cortanaReg4
+    }
+    sp "$cortanaReg4" "VoiceActivationEnableAboveLockscreen" 0
 
     # Disable web results
     Set-WindowsSearchSetting -EnableWebResultsSetting $false
@@ -789,6 +810,7 @@ if ($PrivacyTweaks -eq 1) {
     # Disable location sensor
     mkdir-forceful "HKCU:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Permissions\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
     sp "HKCU:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Permissions\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}" "SensorPermissionState" 0
+    sp "HKLM:\SYSTEM\CurrentControlSet\Services\lfsvc\Service\Configuration" "Status" 0
 
     # Do not share wifi networks
     $user = New-Object System.Security.Principal.NTAccount($env:UserName)
@@ -803,11 +825,11 @@ if ($PrivacyTweaks -eq 1) {
     $WifiSense3 = "HKLM:\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config"
 
     If (!(Test-Path $WifiSense1)) {
-        New-Item $WifiSense1
+        New-Item -Force $WifiSense1
     }
     Set-ItemProperty $WifiSense1  Value -Value 0 
     If (!(Test-Path $WifiSense2)) {
-        New-Item $WifiSense2
+        New-Item -Force $WifiSense2
     }
     sp "$WifiSense2" "Value" 0
     sp "$WifiSense3" "AutoConnectAllowedOEM" 0
@@ -815,9 +837,11 @@ if ($PrivacyTweaks -eq 1) {
     # Disable push notifications/live tiles
     $Live = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications"    
     If (!(Test-Path $Live)) {      
-        New-Item $Live
+        New-Item -Force $Live
     }
     sp "$Live" "NoTileApplicationNotification" 1
+	sp "$Live" "NoToastApplicationNotification" 1
+	sp "$Live" "NoCloudApplicationNotification" 1
 
     # Some edge settings
     mkdir-forceful "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main"
