@@ -14,14 +14,17 @@
 # 11/18/2018 - Added notes about new installs
 # 10/22/2019 - Prep for Windows 1908
 # 12/30/2019 - Fixed hosts and added other things
+# 04/29/2020 - Preparing for Windows 10 2004
+#            - Added xbox checks
+#            - Preparing parameters to avoid modifying the script for setting options
 
 #############################################################################################
 # I am not a powershell scripter and I do not claim to be. A lot of the stuff I did here was
 # done based on my basic knowledge of bash and perl and remembering powershell from my school
-# courses. I could give these scripts commandline arguments and other fancy stuff, but I'm
-# not willing to. Instead, there are variables that can be modified that will alter the
-# script's runtime. Please make sure to read all comments.
+# courses. This script accepts parameters, true or false. See the defaults.
 # 
+# > .\win10clean.ps1 -RemoveStore:$false -EnableTrueMouse
+#
 # Your system will reboot when the script is done running.
 
 
@@ -58,29 +61,52 @@
 # This script has been created by Shoot the J Ltd. Remember, we always connect on 3's.
 # Shoot the J Ltd: This isn't a transition, it's a statement.™
 
+# Parameters
+Param (
+    [switch]$RemoveApps = $true,
+    [switch]$RemoveOneDrive = $true,
+    [switch]$RemoveStore = $true,
+    [switch]$DisableServices = $true,
+    [switch]$DisableTasks = $true,
+    [switch]$DisableDefender = $false,
+    [switch]$EnableTrueMouse = $false,
+    [switch]$DisableTelemetry = $true,
+    [switch]$DisableTelemetryEtcHosts = $true,
+    [switch]$EnableSkype = $true,
+    [switch]$UsabilityFeatures = $true,
+    [switch]$PrivacyTweaks = $true,
+    [switch]$TweakSSD = $false,
+    [switch]$DisableDriverUpdates = $false,
+    [switch]$xboxapps = $false,
+    [switch]$RestartComputer = $false,
+    [switch]$ImportLayout = $false
+)
+
 # Variables
-$RemoveApps = 1
-$RemoveOneDrive = 1
-$RemoveStore = 1
-$DisableServices = 1
-$DisableTasks = 1
-$DisableDefender = 1
-$EnableTrueMouse = 0
-$DisableTelemetry = 1
-$DisableTelemetryEtcHosts = 1
-$EnableSkype = 1
-$UsabilityFeatures = 1
-$PrivacyTweaks = 1
-$TweakSSD = 0
+#$RemoveApps = 1
+#$RemoveOneDrive = 1
+#$RemoveStore = 1
+#$DisableServices = 1
+#$DisableTasks = 1
+#$DisableDefender = 1
+#$EnableTrueMouse = 0
+#$DisableTelemetry = 1
+#$DisableTelemetryEtcHosts = 1
+#$EnableSkype = 1
+#$UsabilityFeatures = 1
+#$PrivacyTweaks = 1
+#$TweakSSD = 0
 # If you are using this during the final stages of an install ($OEM$ folders) this
 # should be set to 0 and the drivers you don't want updated should be manually selected
 # in device manager.
-$DisableDriverUpdates = 0
+#$DisableDriverUpdates = 0
+# If you use xbox, set "RemoveStore" to false and set the below to true
+#$xboxapps = 0
 # There is a problem where rebooting during the final stages poses problems for builds of 1809
 # and higher. This is disabled in my builds as a result. If you are running this after a full install
 # and you are on the deskop, then setting this to a 1 is fine.
-$RestartComputer = 0
-$ImportLayout = 0
+#$RestartComputer = 0
+#$ImportLayout = 0
 
 # Add services here if you'd like
 $systemServices = @(
@@ -99,11 +125,16 @@ $systemServices = @(
     "WbioSrvc"                                 # Windows Biometric Service
     "WMPNetworkSvc"                            # Windows Media Player Network Sharing Service
     #"wscsvc"                                  # Windows Security Center Service
-    "XblAuthManager"                           # Xbox Live Auth Manager
-    "XblGameSave"                              # Xbox Live Game Save Service
-    "XboxNetApiSvc"                            # Xbox Live Networking Service
     "ndu"                                      # Windows Network Data Usage Monitor
 )
+
+if ($xboxapps -eq $false) {
+    $xboxSystemServices += @(
+        "XblAuthManager"                           # Xbox Live Auth Manager
+        "XblGameSave"                              # Xbox Live Game Save Service
+        "XboxNetApiSvc"                            # Xbox Live Networking Service
+    )
+}
 
 # Tasks
 $defenderTasks = @(
@@ -138,8 +169,6 @@ $bloatedKeys = @(
     "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
     "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
     "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
             
     # Windows File
     "HKCR:\Extensions\ContractId\Windows.File\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
@@ -148,8 +177,6 @@ $bloatedKeys = @(
     "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
     "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
     "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
             
     # Scheduled Tasks to delete
     "HKCR:\Extensions\ContractId\Windows.PreInstalledConfigTask\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
@@ -157,12 +184,21 @@ $bloatedKeys = @(
     # Windows Protocol Keys
     "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
     "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
                
     # Windows Share Target
     "HKCR:\Extensions\ContractId\Windows.ShareTarget\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
 )
+
+If ($xboxapps -eq $false) {
+  $bloatedKeys += @(
+      "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+      "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+      "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+      "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+      "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+      "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+  )
+}
 
 # IP's and hosts
 $msIPs = @(
@@ -291,9 +327,6 @@ $telemetryDomains = @(
     "secure.flashtalking.com"
     "services.wes.df.telemetry.microsoft.com"
     "settings-sandbox.data.microsoft.com"
-    "settings-ssl.xboxlive.com"
-    "settings-ssl.xboxlive.com-c.edgekey.net"
-    "settings-ssl.xboxlive.com-c.edgekey.net.globalredir.akadns.net"
     "sqm.df.telemetry.microsoft.com"
     "sqm.telemetry.microsoft.com"
     "sqm.telemetry.microsoft.com.nsatc.net"
@@ -337,8 +370,16 @@ $telemetryDomains = @(
     "www.msftncsi.com"
 )
 
+if ($xboxapps -eq $false) {
+    $telemetryDomains += @(
+        "settings-ssl.xboxlive.com"
+        "settings-ssl.xboxlive.com-c.edgekey.net"
+        "settings-ssl.xboxlive.com-c.edgekey.net.globalredir.akadns.net"
+    )
+}
+
 $telemetrySkypeDomains = @(
-    "ui.skype.com",
+    "ui.skype.com"
     "pricelist.skype.com"
     "apps.skype.com"
     "s.gateway.messenger.live.com"
@@ -357,6 +398,18 @@ $WhiteListedApps = @(
     "Microsoft.Windows.Photos"
     "Microsoft.DesktopAppInstaller"
 )
+
+if ($xboxapps -eq $true) {
+    $WhiteListedApps += @(
+        "Microsoft.XboxGameCallableUI"
+        "Microsoft.Xbox.TCUI"
+        "Name=Microsoft.XboxSpeechToTextOverlay"
+        "Name=Microsoft.XboxIdentityProvider"
+        "Name=Microsoft.XboxApp"
+        "Name=Microsoft.XboxGameOverlay"
+        "Name=Microsoft.XboxGamingOverlay"
+    )
+}
 
 $syncGroups = @(
     "Accessibility"
@@ -431,7 +484,7 @@ if (-not $userObject.IsInRole([Security.Principal.WindowsBuiltinRole]::Administr
 }
 
 # Removing most Windoze Apps and forcing "Cloud Content" to never come back
-If ($RemoveApps -eq '1') {
+If ($RemoveApps -eq $true) {
     show-message "Disabling Windows Consumer Features and Tips"
     mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
     sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent" "DisableWindowsConsumerFeatures" 1
@@ -462,7 +515,7 @@ If ($RemoveApps -eq '1') {
     }
 }
 
-If ($RemoveOneDrive -eq '1') {
+If ($RemoveOneDrive -eq $true) {
     # We need to kill the processes first
     show-message "Killing Onedrive"
     taskkill.exe /F /IM "OneDrive.exe"
@@ -506,22 +559,21 @@ If ($RemoveOneDrive -eq '1') {
 }
 
 # WARNING: If you remove the store, you can no longer install Windows Apps. If you actually
-#          want one of the apps that I'm removing, comment it above before you remove the
-#          store. IT IS EXTREMELY DIFFICULT TO UNDO THIS.
-#          Don't say I didn't warn you.
-If ($RemoveStore -eq '1') {
+#          want the apps that I'm removing, keep the store and reinstall it.
+#          It is extremely annoying to undo this.
+If ($RemoveStore -eq $true) {
     show-warning "WARNING: Deleting the Windows Store"
     Get-AppxPackage *WindowsStore* | Remove-AppxPackage
     Get-AppxProvisionedPackage -Online | where DisplayName -Like *WindowsStore* | Remove-AppxProvisionedPackage -Online
 }
 
-if ($DisableServices -eq '1') {
+if ($DisableServices -eq $true) {
     foreach ($x in $systemServices) {
         Get-Service -Name $x | Set-Service -StartupType Disabled
     }
 }
 
-if ($DisableTasks -eq '1') {
+if ($DisableTasks -eq $true) {
     foreach ($task in $defaultTasks) {
         $parts = $task.split('\')
         $name = $parts[-1]
@@ -531,7 +583,7 @@ if ($DisableTasks -eq '1') {
 }
 
 # You would be an idiot to leave this garbage enabled
-If ($DisableDefender -eq '1') {
+If ($DisableDefender -eq $true) {
     # Disable the annoying tray
     show-message "Removing Defender Tray"
     rp "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" "WindowsDefender" -ea 0
@@ -575,7 +627,7 @@ If ($DisableDefender -eq '1') {
 
 # This basically applies "true mouse", or MarkC's "Mouse Acceleration Fix"
 # http://donewmouseaccel.blogspot.com/2010/03/markc-windows-7-mouse-acceleration-fix.html
-If ($EnableTrueMouse -eq '1') {
+If ($EnableTrueMouse -eq $true) {
     show-message "Applying True Mouse"
     sp "HKCU:\Control Panel\Mouse" "MouseSensitivity" "10"
     sp "HKCU:\Control Panel\Mouse" "MouseSpeed" "0"
@@ -595,7 +647,7 @@ If ($EnableTrueMouse -eq '1') {
     0x1e, 0x06, 0x80, 0x12, 0x00, 0x00, 0x00))
 }
 
-if ($UsabilityFeatures -eq 1) {
+if ($UsabilityFeatures -eq $true) {
     # Disable gamebar
     show-message "Disabling gamebar"
     mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameDVR"
@@ -617,7 +669,7 @@ if ($UsabilityFeatures -eq 1) {
     show-message "Disable Windows Update Seeding"
     mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization"
     sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization" "DODownloadMode" 0
-    if ($DisableDriverUpdates -eq 1) {
+    if ($DisableDriverUpdates -eq $true) {
         # Disable driver updates
         show-warning "Disabling automatic driver updates"
         sp "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching" "SearchOrderConfig" 0
@@ -668,7 +720,7 @@ if ($UsabilityFeatures -eq 1) {
     # This disable last access time on everything. Set it to 0 if you care about
     # last access times. Maybe a good idea to keep it on so you know if maybe
     # an auto script or something ran. How else would you know?
-    if ($TweakSSD -eq 1) {
+    if ($TweakSSD -eq $true) {
         fsutil behavior set DisableLastAccess 1
         fsutil behavior set EncryptPagingFile 0 
     }
@@ -684,7 +736,7 @@ if ($UsabilityFeatures -eq 1) {
     }
 }
 
-if ($DisableTelemetry -eq 1) {
+if ($DisableTelemetry -eq $true) {
     show-message "Disable Telemetry"
     mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
     mkdir-forceful "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
@@ -693,7 +745,7 @@ if ($DisableTelemetry -eq 1) {
     Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection' -Name 'AllowTelemetry' -Type DWord -Value 0
     Set-ItemProperty -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection' -Name 'AllowTelemetry' -Type DWord -Value 0
 
-    if ($DisableTelemetryEtcHosts -eq 1) {
+    if ($DisableTelemetryEtcHosts -eq $true) {
         show-message "Disable Telemetry in \etc\hosts"
         foreach ($x in $telemetryDomains) {
         if (-Not (Select-String -Path $etcHosts -Pattern $x)) {
@@ -703,8 +755,8 @@ if ($DisableTelemetry -eq 1) {
         }
     }
 
-    # If you're one of those assholes who still use skype, make sure it's "1"
-    if ($EnableSkype -eq 0) {
+    # If you're one of those assholes who still use skype, make sure it's "true"
+    if ($EnableSkype -eq $false) {
         show-message "Disable Skype Telemetry in \etc\hosts"
         foreach ($x in $telemetrySkypeDomains) {
         if (-Not (Select-String -Path $etcHosts -Pattern $x)) {
@@ -715,7 +767,7 @@ if ($DisableTelemetry -eq 1) {
     }
 }
 
-if ($PrivacyTweaks -eq 1) {
+if ($PrivacyTweaks -eq $true) {
     foreach ($key in (Get-ChildItem "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications")) {
         sp ("HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications\" + $key.PSChildName) "Disabled" 1
     }
@@ -854,16 +906,18 @@ if ($PrivacyTweaks -eq 1) {
     sp "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\PhishingFilter" "EnabledV9" 0
 }
 
-if ($ImportLayout -eq 1) {
+if ($ImportLayout -eq $true) {
     Copy-Item C:\Programs\layout.xml C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\CustomLayout.xml
     Import-StartLayout -LayoutPath C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\CustomLayout.xml -MountPath $env:SystemDrive\
 }
 
-if ($RestartComputer -eq 1) {
+if ($RestartComputer -eq $true) {
     show-warning "Your system will reboot in 5 seconds"
     sleep 5
     Restart-Computer
 } Else {
     show-message "Starting Explorer"
     start "explorer.exe"
+    $wshell = New-Object -ComObject Wscript.Shell
+    $wshell.Popup("It is recommended to reboot your computer.",0,"PLEASE REBOOT")
 }

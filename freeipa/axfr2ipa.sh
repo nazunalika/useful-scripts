@@ -6,6 +6,7 @@
 
 # Replace IPADDR with DNS Server (eg 10.110.0.1)
 # Replace DOMAIN with zone domain name (eg example.com)
+# Replace PTRDOM with reverse zone name (eg 0.100.0.in-addr.arpa.)
 
 dig AXFR @IPADDR DOMAIN | egrep "A|CNAME|AAAA" | sort -k5 | awk '{
   if ($4=="CNAME") {
@@ -26,3 +27,8 @@ dig AXFR @IPADDR DOMAIN | egrep "A|CNAME|AAAA" | sort -k5 | awk '{
     printf " --aaaa-create-reverse\n";
   }
 }'
+
+dig AXFR @IPADDR PTRDOM | grep 'PTR' | sort -k5 | awk '{
+  printf "ipa dnsrecord-add PTRDOM "};
+  split($1, a, "."){printf a[1]};
+  {printf " --ptr-rec="$5"\n"}'
