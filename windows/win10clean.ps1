@@ -397,17 +397,19 @@ $WhiteListedApps = @(
     "Microsoft.WebpImageExtension"
     "Microsoft.Windows.Photos"
     "Microsoft.DesktopAppInstaller"
+    "Microsoft.VCLibs.140.00"
+    "Microsoft.ScreenSketch"
 )
 
 if ($xboxapps -eq $true) {
     $WhiteListedApps += @(
         "Microsoft.XboxGameCallableUI"
         "Microsoft.Xbox.TCUI"
-        "Name=Microsoft.XboxSpeechToTextOverlay"
-        "Name=Microsoft.XboxIdentityProvider"
-        "Name=Microsoft.XboxApp"
-        "Name=Microsoft.XboxGameOverlay"
-        "Name=Microsoft.XboxGamingOverlay"
+        "Microsoft.XboxSpeechToTextOverlay"
+        "Microsoft.XboxIdentityProvider"
+        "Microsoft.XboxApp"
+        "Microsoft.XboxGameOverlay"
+        "Microsoft.XboxGamingOverlay"
     )
 }
 
