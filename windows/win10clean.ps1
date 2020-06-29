@@ -793,6 +793,8 @@ if ($PrivacyTweaks -eq $true) {
     sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy" "Enabled" 0
     sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy" "TailoredExperiencesWithDiagnosticDataEnabled" 0
     sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" "BingSearchEnabled" 0
+    sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" "AllowSearchToUseLocation" 0
+    sp "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" "CortanaConsent" 0
     mkdir-forceful "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
     sp "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" "DisableWebSearch" 1
     sp "HKLM:\SOFTWARE\Policies\Microsoft\InputPersonalization" "AllowInputPersonalization" 0
@@ -839,6 +841,8 @@ if ($PrivacyTweaks -eq $true) {
 
     # Disable web results
     Set-WindowsSearchSetting -EnableWebResultsSetting $false
+    mkdir-forceful "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer"
+    sp "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer" "DisableSearchBoxSuggestions" 1
     
     # Disable TIPC
     mkdir-forceful "HKCU:\SOFTWARE\Microsoft\Input\TIPC"
