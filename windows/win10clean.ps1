@@ -17,6 +17,7 @@
 # 04/29/2020 - Preparing for Windows 10 2004
 #            - Added xbox checks
 #            - Preparing parameters to avoid modifying the script for setting options
+# 10/22/2020 - Preparing for Windows 10 20H2
 
 #############################################################################################
 # I am not a powershell scripter and I do not claim to be. A lot of the stuff I did here was
@@ -399,6 +400,7 @@ $WhiteListedApps = @(
     "Microsoft.DesktopAppInstaller"
     "Microsoft.VCLibs.140.00"
     "Microsoft.ScreenSketch"
+    "Microsoft.MicrosoftEdge.Stable"
 )
 
 if ($xboxapps -eq $true) {
