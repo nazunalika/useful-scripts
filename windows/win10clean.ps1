@@ -17,7 +17,7 @@
 # 04/29/2020 - Preparing for Windows 10 2004
 #            - Added xbox checks
 #            - Preparing parameters to avoid modifying the script for setting options
-# 10/22/2020 - Preparing for Windows 10 20H2
+# 06/15/2021 - Preparing for Sun Valley
 
 #############################################################################################
 # I am not a powershell scripter and I do not claim to be. A lot of the stuff I did here was
@@ -393,6 +393,7 @@ $WhiteListedApps = @(
     "Microsoft.HEIFImageExtension"
     "Microsoft.MicrosoftStickyNotes"
     "Microsoft.MSPaint"
+    "Microsoft.Paint"
     "Microsoft.VP9VideoExtensions"
     "Microsoft.WebMediaExtensions"
     "Microsoft.WebpImageExtension"
@@ -400,6 +401,8 @@ $WhiteListedApps = @(
     "Microsoft.DesktopAppInstaller"
     "Microsoft.VCLibs.140.00"
     "Microsoft.ScreenSketch"
+    "Microsoft.WindowsNotepad"
+    "Microsoft.WindowsTerminal"
     "Microsoft.MicrosoftEdge.Stable"
 )
 
