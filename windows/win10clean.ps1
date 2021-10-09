@@ -407,6 +407,7 @@ $WhiteListedApps = @(
     "Microsoft.Paint"
     "Microsoft.WindowsTerminal"
     "Microsoft.WindowsNotepad"
+    "Microsoft.SecHealthUI"
 )
 
 if ($xboxapps -eq $true) {
