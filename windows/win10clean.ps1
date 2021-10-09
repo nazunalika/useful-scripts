@@ -405,6 +405,8 @@ $WhiteListedApps = @(
     "Microsoft.WindowsTerminal"
     "Microsoft.MicrosoftEdge.Stable"
     "Microsoft.Paint"
+    "Microsoft.WindowsTerminal"
+    "Microsoft.WindowsNotepad"
 )
 
 if ($xboxapps -eq $true) {
