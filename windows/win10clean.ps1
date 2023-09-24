@@ -123,7 +123,7 @@ $systemServices = @(
     "RemoteRegistry"                           # Remote Registry
     "SharedAccess"                             # Internet Connection Sharing (ICS)
     "TrkWks"                                   # Distributed Link Tracking Client
-    "WbioSrvc"                                 # Windows Biometric Service
+    #"WbioSrvc"                                 # Windows Biometric Service
     "WMPNetworkSvc"                            # Windows Media Player Network Sharing Service
     #"wscsvc"                                  # Windows Security Center Service
     "ndu"                                      # Windows Network Data Usage Monitor
