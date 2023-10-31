@@ -392,6 +392,7 @@ $WhiteListedApps = @(
     "Microsoft.WindowsCalculator"
     "Microsoft.HEIFImageExtension"
     "Microsoft.MicrosoftStickyNotes"
+    "Microsoft.HEVCVideoExtension"
     "Microsoft.MSPaint"
     "Microsoft.Paint"
     "Microsoft.VP9VideoExtensions"
